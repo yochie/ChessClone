@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,13 +14,13 @@ public class Board : MonoBehaviour
         this.tiles = new();
         foreach(BoardTile tile in this.GetComponentsInChildren<BoardTile>())
         {
-            this.tiles[tile.GetPosition()] = tile;
+            this.tiles[tile.GetBoardPosition()] = tile;
         }
 
         this.pieces = new();
         foreach (BoardPiece piece in this.GetComponentsInChildren<BoardPiece>())
         {
-            this.pieces[piece.GetComponentInParent<BoardTile>().GetPosition()] = piece;
+            this.pieces[piece.GetComponentInParent<BoardTile>().GetBoardPosition()] = piece;
         }
 
     }
@@ -36,6 +37,14 @@ public class Board : MonoBehaviour
         {
             tile.Highlight(false);
         }
+    }
+
+    internal void MovePieceSpriteTo(BoardPosition boardPosition, Vector3 worldPosition)
+    {
+        if (!this.pieces.ContainsKey(boardPosition))
+            return;
+
+        this.pieces[boardPosition].transform.position = worldPosition;
     }
 }
 

@@ -20,8 +20,7 @@ public class BoardTile : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     [SerializeField]
     private BoardInputHandler inputHandler;
 
-
-    public BoardPosition GetPosition() {
+    public BoardPosition GetBoardPosition() {
         return new BoardPosition(this.xPosition, this.yPosition);
     }
 
@@ -37,7 +36,7 @@ public class BoardTile : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
     public void OnDrag(PointerEventData eventData)
     {
-        //throw new System.NotImplementedException();
+        this.inputHandler.OnTileDrag(this, eventData.pointerCurrentRaycast.worldPosition);
     }
 
     public void OnEndDrag(PointerEventData eventData)
