@@ -10,16 +10,32 @@ public class Board : MonoBehaviour
 
     private void Awake()
     {
+        this.tiles = new();
         foreach(BoardTile tile in this.GetComponentsInChildren<BoardTile>())
         {
             this.tiles[tile.GetPosition()] = tile;
         }
 
+        this.pieces = new();
         foreach (BoardPiece piece in this.GetComponentsInChildren<BoardPiece>())
         {
             this.pieces[piece.GetComponentInParent<BoardTile>().GetPosition()] = piece;
         }
 
+    }
+
+    public void HighligthTiles(List<BoardPosition> positions){
+        foreach(BoardPosition position in positions)
+        {
+            this.tiles[position].Highlight(true);
+        }
+    }
+    public void ClearHighligths()
+    {
+        foreach (BoardTile tile in tiles.Values)
+        {
+            tile.Highlight(false);
+        }
     }
 }
 

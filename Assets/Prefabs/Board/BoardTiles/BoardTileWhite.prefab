@@ -88,9 +88,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3728943642247113364, guid: d1c19101712a7464d9be8b3b358d54ce, type: 3}
+      propertyPath: baseColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3728943642247113364, guid: d1c19101712a7464d9be8b3b358d54ce, type: 3}
+      propertyPath: baseColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3728943642247113364, guid: d1c19101712a7464d9be8b3b358d54ce, type: 3}
+      propertyPath: baseColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3728943642247113364, guid: d1c19101712a7464d9be8b3b358d54ce, type: 3}
+      propertyPath: baseColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5317223570897171995, guid: d1c19101712a7464d9be8b3b358d54ce, type: 3}
       propertyPath: m_Name
-      value: BoardTile
+      value: BoardTileWhite
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
