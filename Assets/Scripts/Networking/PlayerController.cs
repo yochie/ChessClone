@@ -14,6 +14,7 @@ public class PlayerController : NetworkBehaviour
         if (GameController.Singleton != null)
             GameController.Singleton.LocalPlayer = this;
         else
+            //shouldn't occur, but just in case
             Debug.Log("Couldn't set local player on gamecontroller, gamecontroller singleton not ready yet.");
     }
 
@@ -24,6 +25,7 @@ public class PlayerController : NetworkBehaviour
         if (GameController.Singleton != null)
             GameController.Singleton.AddPlayer(this);
         else
+            //shouldn't occur, but just in case 
             Debug.Log("Couldn't set local player on gamecontroller, gamecontroller singleton not ready yet.");
     }
 }
