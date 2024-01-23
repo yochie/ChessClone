@@ -23,7 +23,7 @@ public class BoardTile : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     private BoardInputHandler inputHandler;
 
     public BoardPosition GetBoardPosition() {
-        return new BoardPosition((short) this.xPosition, (short) this.yPosition);
+        return new BoardPosition(this.xPosition, this.yPosition);
     }
 
     public void Highlight(Color color)
