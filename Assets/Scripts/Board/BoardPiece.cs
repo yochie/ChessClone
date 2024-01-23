@@ -1,18 +1,33 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BoardPiece : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    private PlayerColor ownerColor;
+
+    [SerializeField]
+    private PieceTypeID pieceTypeID;
+
+    [SerializeField]
+    private int pieceIndex;
+
+    public PlayerColor GetOwnerID()
     {
-        
+        return this.ownerColor;
     }
 
-    // Update is called once per frame
-    void Update()
+    public PieceTypeID GetPieceTypeID()
     {
-        
+
+        return this.pieceTypeID;
+    }
+
+    public int GetIndex()
+    {
+
+        return this.pieceIndex;
     }
 }

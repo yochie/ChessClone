@@ -2,18 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using System;
 
 public class PlayerController : NetworkBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public PlayerColor PlayerColor { get; set; }
+
+    public override void OnStartLocalPlayer()
     {
-        
+        base.OnStartLocalPlayer();
+        if (GameController.Singleton != null)
+            GameController.Singleton.LocalPlayer = this;
+        else
+            Debug.Log("Couldn't set local player on gamecontroller, gamecontroller singleton not ready yet.");
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnStartServer()
     {
+        base.OnStartServer();
         
+        if (GameController.Singleton != null)
+            GameController.Singleton.AddPlayer(this);
+        else
+            Debug.Log("Couldn't set local player on gamecontroller, gamecontroller singleton not ready yet.");
     }
 }
