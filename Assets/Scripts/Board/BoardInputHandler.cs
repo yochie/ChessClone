@@ -2,39 +2,50 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class BoardInputHandler : MonoBehaviour
+public class BoardInputHandler : NetworkBehaviour
 {
     [SerializeField]
     private BoardView boardView;
 
+    [SerializeField]
+    private GameState gameState;
+
+    public bool InputAllowed { get; set; }
+
+    public BoardTile HoveredTile { get; set; }
+
     private bool draggingBoardPiece = false;
-    private BoardTile hoveredTile;
+    
+
+    public void Awake()
+    {
+        this.InputAllowed = false;
+    }
+
 
     public void OnTileBeginDrag(BoardTile tile)
-    {
-        this.boardView.HighligthTiles(new List<BoardPosition>() { tile.GetBoardPosition() });
-        //TODO : replace with check on gamestate of board to see if tile contains piece and its your turn
-        if (GameController.Singleton.TileHoldsPiece(tile.GetBoardPosition()) &&
-            GameController.Singleton.ItsMyTurn() &&
-            GameController.Singleton.IOwnPieceAtTile(tile.GetBoardPosition())
-            )
+    {        
+        if (this.InputAllowed && 
+            this.gameState.PlayerTurn == GameController.Singleton.LocalPlayer.PlayerColor &&
+            this.gameState.PositionHoldsAPiece(tile.GetBoardPosition()) &&            
+            this.gameState.IsOwnerofPieceAtPosition(tile.GetBoardPosition(), GameController.Singleton.LocalPlayer.PlayerColor))
         {
-            this.draggingBoardPiece = true;            
+            //TODO: Get list of possible moves for piece at tile
+            this.boardView.HighligthTiles(new List<BoardPosition>() { tile.GetBoardPosition() });
+            this.draggingBoardPiece = true;
         }
         else
         {
-            Debug.Log("Drag blocked");
-            Debug.Log(GameController.Singleton.TileHoldsPiece(tile.GetBoardPosition()));
-            Debug.Log(GameController.Singleton.ItsMyTurn());
-            Debug.Log(GameController.Singleton.IOwnPieceAtTile(tile.GetBoardPosition()));
+            Debug.Log("Dragging not allowed");
         }
     }
 
     public void OnTileDrag(BoardTile tile, Vector3 pointerWorldPosition)
     {
         if(this.draggingBoardPiece)
-            this.boardView.MovePieceSpriteTo(tile.GetBoardPosition(), pointerWorldPosition);
+            this.boardView.MovePieceSpriteToWorldPosition(tile.GetBoardPosition(), pointerWorldPosition);
     }
 
     public void OnTileEndDrag(BoardTile startTile)
@@ -43,15 +54,21 @@ public class BoardInputHandler : MonoBehaviour
         if (this.draggingBoardPiece)
         {
             BoardPosition startPosition = startTile.GetBoardPosition();
-            BoardPosition endPosition = this.hoveredTile.GetBoardPosition();
-            if (GameController.IsValidMove(startPosition, endPosition))
+            BoardPosition endPosition = this.HoveredTile.GetBoardPosition();
+            if (GameController.Singleton.IsValidMove(this.gameState, startPosition, endPosition))
                 GameController.Singleton.CmdTryMove(startPosition, endPosition);
+            else
+            {
+                this.boardView.MovePieceSpriteToBoardPosition(startTile.GetBoardPosition(), startTile.GetBoardPosition());
+            }
             this.draggingBoardPiece = false;
         }
     }
 
-    internal void SetHovered(BoardTile boardTile)
+    [ClientRpc]
+    public void RpcSetInputAllowed()
     {
-        this.hoveredTile = boardTile;
+        this.InputAllowed = true;
     }
+
 }

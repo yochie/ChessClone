@@ -46,11 +46,11 @@ public class BoardTile : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
     public void OnMouseEnter()
     {
-        this.inputHandler.SetHovered(this);
+        this.inputHandler.HoveredTile = this;
     }
 
     public void OnMouseExit()
     {
-        this.inputHandler.SetHovered(null);
+        this.inputHandler.HoveredTile = null;
     }
 }

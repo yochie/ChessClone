@@ -9,11 +9,18 @@ public class GameController : NetworkBehaviour
     #region Editor
     [SerializeField]
     private BoardView boardView;
+
+    [SerializeField]
+    private BoardInputHandler boardInputHandler;
+
+
+    [SerializeField]
+    private GameState gameState;
     #endregion
 
     #region Server only
     private List<PlayerController> players = new();
-    private GameState gameState;
+    
     public GameState GameState { get => this.gameState; set => this.gameState = value; }
     #endregion
 
@@ -41,14 +48,14 @@ public class GameController : NetworkBehaviour
     {
         base.OnStartServer();
 
-        this.gameState = this.InitializeGameStateFromBoardView();
+        this.InitializeGameStateFromBoardView();
     }
 
     [Server]
-    private GameState InitializeGameStateFromBoardView()
+    private void InitializeGameStateFromBoardView()
     {
-        Dictionary<BoardPosition, GamePiece> pieces = this.boardView.GetBoardViewPieces();
-        return new GameState(pieces, PlayerColor.white);
+        Dictionary<BoardPosition, GamePieceID> boardViewState = this.boardView.GetBoardViewState();
+        this.gameState.Init(boardViewState, PlayerColor.white);
     }
 
     [Server]
@@ -65,6 +72,8 @@ public class GameController : NetworkBehaviour
                 player.PlayerColor = PlayerColor.black;
             index++;
         }
+
+        this.boardInputHandler.RpcSetInputAllowed();
     }
 
     [Server]
@@ -84,11 +93,11 @@ public class GameController : NetworkBehaviour
     public void CmdTryMove(BoardPosition from, BoardPosition to)
     {
         //validate on server, even though it will have been done clientsice, just to be sure
-        if (IsValidMove(from, to)) {
+        if (IsValidMove(this.gameState, from, to)) {
             //Update game state
-            this.GameState = this.GameState.Move(from, to);
-            this.GameState = this.GameState.ChangeTurn();
-            Debug.Log(GameState.playerTurn);
+            this.GameState.MovePiece(from, to);
+            this.GameState.ChangeTurn();
+            Debug.Log(GameState.PlayerTurn);
             //Perform clientside ui updates
             this.RpcUpdateBoardViewForMove(from, to);
         }
@@ -99,7 +108,7 @@ public class GameController : NetworkBehaviour
     [ClientRpc]
     private void RpcUpdateBoardViewForMove(BoardPosition from, BoardPosition to)
     {
-        this.boardView.MovePieceSpriteToTile(from, to);
+        this.boardView.MovePieceSpriteToBoardPosition(from, to);
         this.boardView.UpdatePiecePosition(from, to);
     }
     #endregion
@@ -107,24 +116,29 @@ public class GameController : NetworkBehaviour
     #region GameState utility
     internal bool TileHoldsPiece(BoardPosition boardPosition)
     {
-        return this.gameState.TileHoldsPiece(boardPosition);
+        return this.gameState.PositionHoldsAPiece(boardPosition);
     }
 
     internal bool ItsMyTurn()
     {
         PlayerColor myPlayerColor = this.localPlayer.PlayerColor;
-        return this.gameState.playerTurn == myPlayerColor;
+        return this.gameState.PlayerTurn == myPlayerColor;
     }
 
     internal bool IOwnPieceAtTile(BoardPosition boardPosition)
     {
         PlayerColor myPlayerColor = this.localPlayer.PlayerColor;
-        return this.gameState.IsTilePieceOwner(boardPosition, myPlayerColor);
+        return this.gameState.IsOwnerofPieceAtPosition(boardPosition, myPlayerColor);
     }
 
-    internal static bool IsValidMove(BoardPosition startTile, BoardPosition endTile)
+    internal bool IsValidMove(GameState gamestate, BoardPosition startPosition, BoardPosition endPosition)
     {
         //todo : validate move
+        if(startPosition.Equals(endPosition))
+        {
+            Debug.Log("Invalid move : start == end");
+            return false;
+        }
         return true;
     }
     #endregion

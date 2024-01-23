@@ -3,14 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Manages board tile and piece sprites (positions, colors, etc)
 public class BoardView : MonoBehaviour
 {
-
+    //Stores some state to allow client side visual/ui changes without having to go through server for all operations
+    //Server should still validate any operation on the logical game state before it goes through
     private Dictionary<BoardPosition, BoardPiece> pieces;
+
     private Dictionary<BoardPosition, BoardTile> tiles;
 
+    //Init client side date
     private void Awake()
     {
+        
         this.tiles = new();
         foreach(BoardTile tile in this.GetComponentsInChildren<BoardTile>())
         {
@@ -22,9 +27,33 @@ public class BoardView : MonoBehaviour
         {
             this.pieces[piece.GetComponentInParent<BoardTile>().GetBoardPosition()] = piece;
         }
-
     }
 
+    #region Client-side state getters
+
+    //used to setup initial game state from scene setup on host
+    public Dictionary<BoardPosition, GamePieceID> GetBoardViewState()
+    {
+        Dictionary<BoardPosition, GamePieceID> gamePieces = new();
+        foreach (var (position, piece) in this.pieces)
+        {
+            gamePieces[position] = new GamePieceID(piece.GetOwnerID(), piece.GetPieceTypeID(), piece.GetIndex());
+        }
+        return gamePieces;
+    }
+    #endregion
+
+    #region Client-side state setters
+    internal void UpdatePiecePosition(BoardPosition startPosition, BoardPosition endPosition)
+    {
+        BoardPiece toMove = this.pieces[startPosition];
+        this.pieces.Remove(startPosition);
+        toMove.transform.parent = this.tiles[endPosition].transform;
+        this.pieces[endPosition] = toMove;
+    }
+    #endregion
+
+    #region Visual modifications
     public void HighligthTiles(List<BoardPosition> positions){
         foreach(BoardPosition position in positions)
         {
@@ -39,7 +68,7 @@ public class BoardView : MonoBehaviour
         }
     }
 
-    internal void MovePieceSpriteTo(BoardPosition boardPositionStart, Vector3 worldPositionEnd)
+    internal void MovePieceSpriteToWorldPosition(BoardPosition boardPositionStart, Vector3 worldPositionEnd)
     {
         if (!this.pieces.ContainsKey(boardPositionStart))
             return;
@@ -47,7 +76,7 @@ public class BoardView : MonoBehaviour
         this.pieces[boardPositionStart].transform.position = worldPositionEnd;
     }
 
-    internal void MovePieceSpriteToTile(BoardPosition boardPositionStart, BoardPosition boardPositionEnd)
+    internal void MovePieceSpriteToBoardPosition(BoardPosition boardPositionStart, BoardPosition boardPositionEnd)
     {
         if (!this.pieces.ContainsKey(boardPositionStart))
             return;
@@ -60,22 +89,5 @@ public class BoardView : MonoBehaviour
         Vector3 worldPositionEnd = this.tiles[boardPositionEnd].transform.position;
         this.pieces[boardPositionStart].transform.position = worldPositionEnd;
     }
-
-    public Dictionary<BoardPosition, GamePiece> GetBoardViewPieces()
-    {
-        Dictionary<BoardPosition, GamePiece> gamePieces = new();
-        foreach(var (position, piece) in this.pieces)
-        {
-            gamePieces[position] = new GamePiece(piece.GetOwnerID(), piece.GetPieceTypeID(), piece.GetIndex(), position);
-        }
-        return gamePieces;
-    }
-
-    internal void UpdatePiecePosition(BoardPosition from, BoardPosition to)
-    {
-        BoardPiece toMove = this.pieces[from];
-        this.pieces.Remove(from);
-        toMove.transform.parent = this.tiles[to].transform;
-        this.pieces[to] = toMove;
-    }
+    #endregion
 }

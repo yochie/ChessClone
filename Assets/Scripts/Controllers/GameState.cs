@@ -2,76 +2,91 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Mirror;
+using System;
 
-public struct GameState
+//Raw data that defines game logical state
+public class GameState : NetworkBehaviour
 {
-    public Dictionary<BoardPosition, GamePiece> gamePieces;
-    public PlayerColor playerTurn;
+    private readonly SyncDictionary<BoardPosition, GamePieceID> gamePieces = new();
+    
+    [SyncVar]
+    private PlayerColor playerTurn;
+    public PlayerColor PlayerTurn { get => this.playerTurn; }
 
-    public GameState(Dictionary<BoardPosition, GamePiece> gamePieces, PlayerColor playerTurn)
+    public void Init(Dictionary<BoardPosition, GamePieceID> gamePieces, PlayerColor playerTurn)
     {
-        this.gamePieces = gamePieces;
+        foreach(var (position, gamePieceID) in gamePieces)
+        {
+            this.gamePieces.Add(position, gamePieceID);
+        }
         this.playerTurn = playerTurn;
     }
 
-    public bool TileHoldsPiece(BoardPosition position)
-    {
-        return this.gamePieces.ContainsKey(position);
-    }
-
-    internal bool IsTilePieceOwner(BoardPosition boardPosition, PlayerColor playerColor)
-    {
-        if (!gamePieces.ContainsKey(boardPosition))
-        {
-            Debug.Log("Couldn't find piece for tile");
-            return false;
-        }
-        GamePiece tilePiece = this.gamePieces[boardPosition];
-
-        if (tilePiece.ownerColor == playerColor)
-            return true;
-        else
-            return false;
-    }
-
-    internal GameState Move(BoardPosition from, BoardPosition to)
+    #region State modifiers
+    internal void MovePiece(BoardPosition from, BoardPosition to)
     {
         if (!gamePieces.ContainsKey(from))
         {
             Debug.Log("Couldn't find piece for tile");
-            return this;
         }
-        GamePiece toMove = this.gamePieces[from];
+        GamePieceID toMove = this.gamePieces[from];
         this.gamePieces.Remove(from);
-        toMove.position = to;
         this.gamePieces[to] = toMove;
-        return this;
     }
 
-    public GameState ChangeTurn()
+    internal void DeletePieceAt(BoardPosition position)
+    {
+        if (!gamePieces.ContainsKey(position))
+        {
+            Debug.Log("Couldn't find piece to remove");
+        }
+        this.gamePieces.Remove(position);
+    }
+
+    public void ChangeTurn()
     {
         if (this.playerTurn == PlayerColor.white)
             this.playerTurn = PlayerColor.black;
         else
             this.playerTurn = PlayerColor.white;
-        return this;
     }
+    #endregion
+
+    #region Utility/Getters
+    public bool PositionHoldsAPiece(BoardPosition position)
+    {
+        return this.gamePieces.ContainsKey(position);
+    }
+
+    public bool IsOwnerofPieceAtPosition(BoardPosition position, PlayerColor playerColor)
+    {
+        if (!gamePieces.ContainsKey(position))
+        {
+            Debug.Log("Couldn't find piece for tile");
+            return false;
+        }
+        GamePieceID tilePiece = this.gamePieces[position];
+
+        if (tilePiece.color == playerColor)
+            return true;
+        else
+            return false;
+    }
+    #endregion
 }
 
-
-public struct GamePiece
+public readonly struct GamePieceID
 {
-    public readonly PlayerColor ownerColor;
+    public readonly PlayerColor color;
     public readonly PieceTypeID typeID;
     public readonly int index;
-    public BoardPosition position;
 
-    public GamePiece(PlayerColor ownerColor, PieceTypeID typeID, int index, BoardPosition position)
+    public GamePieceID(PlayerColor ownerColor, PieceTypeID typeID, int index)
     {
-        this.ownerColor = ownerColor;
+        this.color = ownerColor;
         this.typeID = typeID;
         this.index = index;
-        this.position = position;
     }
 }
 
