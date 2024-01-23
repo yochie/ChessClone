@@ -13,6 +13,36 @@ public class King : ScriptableObject, IPieceType
         PlayerColor moverColor = gameState.GetPieceAtPosition(fromPosition).color;
         List<Move> validMoves = new();
 
+        List<Vector2Int> directions = new()
+        {
+            new(1, 0),
+            new(-1, 0),
+            new(0, 1),
+            new(0, -1),
+            new(1, 1),
+            new(-1, -1),
+            new(1, -1),
+            new(-1, 1)
+        };
+        foreach (Vector2Int direction in directions)
+        {
+
+            BoardPosition pos = fromPosition.Add(direction);
+            if (!pos.IsOnBoard())
+                continue;
+
+            if (gameState.PositionHoldsAPiece(pos))
+            {
+                //can eat that piece
+                if (!gameState.IsOwnerOfPieceAtPosition(pos, moverColor))
+                    validMoves.Add(new Move(fromPosition, pos, eats: true, eatPosition: pos));
+            }
+            else
+            {
+                validMoves.Add(new Move(fromPosition, pos, eats: false));
+            }
+        }
+
         return validMoves;
     }
 }
