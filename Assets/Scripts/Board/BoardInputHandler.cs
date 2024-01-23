@@ -24,7 +24,6 @@ public class BoardInputHandler : NetworkBehaviour
         this.InputAllowed = false;
     }
 
-
     public void OnTileBeginDrag(BoardTile tile)
     {        
         if (this.InputAllowed && 
@@ -32,7 +31,7 @@ public class BoardInputHandler : NetworkBehaviour
             this.gameState.PositionHoldsAPiece(tile.GetBoardPosition()) &&            
             this.gameState.IsOwnerofPieceAtPosition(tile.GetBoardPosition(), GameController.Singleton.LocalPlayer.PlayerColor))
         {
-            //TODO: Get list of possible moves for piece at tile
+            //TODO: Get list of possible moves for piece at tile + create ghost version of piece
             this.boardView.HighligthTiles(new List<BoardPosition>() { tile.GetBoardPosition() });
             this.draggingBoardPiece = true;
         }
