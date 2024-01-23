@@ -20,7 +20,7 @@ public readonly struct BoardPosition
 
     public BoardPosition Add(Vector2Int vector)
     {
-        return new BoardPosition(this.xPosition + vector.x, this.yPosition + vector.y)
+        return new BoardPosition(this.xPosition + vector.x, this.yPosition + vector.y);
     }
 
     public override bool Equals(object obj)
