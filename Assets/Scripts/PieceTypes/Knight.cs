@@ -11,7 +11,7 @@ public class Knight : ScriptableObject, IPieceType
     public List<Move> GetPossibleMovesFrom(GameState gameState, BoardPosition fromPosition)
     {
         PlayerColor moverColor = gameState.GetPieceAtPosition(fromPosition).color;
-        List<Move> validMoves = new();
+        List<Move> possibleMoves = new();
         List<Vector2Int> offsets = new() { 
             new(2, 1),
             new(2, -1),
@@ -32,14 +32,14 @@ public class Knight : ScriptableObject, IPieceType
             {
                 //can eat that piece
                 if (!gameState.IsOwnerOfPieceAtPosition(pos, moverColor))
-                    validMoves.Add(new Move(fromPosition, pos, eats: true, eatPosition: pos));
+                    possibleMoves.Add(new Move(fromPosition, pos, eats: true, eatPosition: pos));
             }
             else
             {
-                validMoves.Add(new Move(fromPosition, pos, eats: false));
+                possibleMoves.Add(new Move(fromPosition, pos, eats: false));
             }
 
         }
-        return validMoves;
+        return possibleMoves;
     }
 }

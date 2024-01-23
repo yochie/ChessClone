@@ -11,7 +11,7 @@ public class Bishop : ScriptableObject, IPieceType
     public List<Move> GetPossibleMovesFrom(GameState gameState, BoardPosition fromPosition)
     {
         PlayerColor moverColor = gameState.GetPieceAtPosition(fromPosition).color;
-        List<Move> validMoves = new();
+        List<Move> possibleMoves = new();
         List<Vector2Int> directions = new() { new(1, 1), new(-1, -1), new(1, -1), new(-1, 1) };
         foreach (Vector2Int direction in directions)
         {
@@ -21,15 +21,15 @@ public class Bishop : ScriptableObject, IPieceType
                 {
                     //can eat that piece
                     if (!gameState.IsOwnerOfPieceAtPosition(pos, moverColor))
-                        validMoves.Add(new Move(fromPosition, pos, eats: true, eatPosition: pos));
+                        possibleMoves.Add(new Move(fromPosition, pos, eats: true, eatPosition: pos));
                     break;
                 }
                 else
                 {
-                    validMoves.Add(new Move(fromPosition, pos, eats: false));
+                    possibleMoves.Add(new Move(fromPosition, pos, eats: false));
                 }
             }
         }
-        return validMoves;
+        return possibleMoves;
     }
 }
