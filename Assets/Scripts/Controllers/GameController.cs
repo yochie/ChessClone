@@ -67,9 +67,9 @@ public class GameController : NetworkBehaviour
         foreach(PlayerController player in this.players)
         {
             if (index == startingPlayerIndex)
-                this.RpcAssignColor(player, PlayerColor.white);
+                this.RpcPlayerAssignColor(player, PlayerColor.white);
             else
-                this.RpcAssignColor(player, PlayerColor.black);
+                this.RpcPlayerAssignColor(player, PlayerColor.black);
             index++;
         }
 
@@ -78,7 +78,7 @@ public class GameController : NetworkBehaviour
 
 
     [Server]
-    internal void AddPlayer(PlayerController playerController)
+    internal void RegisterPlayerOnServer(PlayerController playerController)
     {
         this.players.Add(playerController);
     }
@@ -122,7 +122,7 @@ public class GameController : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void RpcAssignColor(PlayerController player, PlayerColor color)
+    private void RpcPlayerAssignColor(PlayerController player, PlayerColor color)
     {
         player.AssignColor(color);
     }

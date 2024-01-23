@@ -31,7 +31,7 @@ public class PlayerController : NetworkBehaviour
         base.OnStartServer();
         
         if (GameController.Singleton != null)
-            GameController.Singleton.AddPlayer(this);
+            GameController.Singleton.RegisterPlayerOnServer(this);
         else
             //shouldn't occur, but just in case 
             Debug.Log("Couldn't set local player on gamecontroller, gamecontroller singleton not ready yet.");
