@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu]
@@ -12,73 +13,27 @@ public class Rook : ScriptableObject, IPieceType
     {
         PlayerColor moverColor = gameState.GetPieceAtPosition(fromPosition).color;
         List<BoardPosition> validMoves = new();
-
-        //go right until you hit a piece
-        for (int x = fromPosition.xPosition + 1; x <= BoardPosition.maxX; x++)
+        List<Vector2Int> directions = new() { new(1, 0), new(-1, 0), new(0, 1), new(0, -1) };
+        foreach(Vector2Int direction in directions)
         {
-            BoardPosition pos = new BoardPosition(x, fromPosition.yPosition);
-            if (gameState.PositionHoldsAPiece(pos))
+            //go right until you hit a piece
+            IEnumerable<int> horizontalRange = Enumerable.Range(0, BoardPosition.maxX);
+            IEnumerable<int> verticalRange = Enumerable.Range(0, BoardPosition.maxY);
+            for (BoardPosition pos = fromPosition.Add(direction);
+                horizontalRange.Contains(pos.xPosition) && verticalRange.Contains(pos.yPosition);
+                pos.Add(direction))
             {
-                //can eat that piece
-                if (!gameState.IsOwnerOfPieceAtPosition(pos, moverColor))
+                if (gameState.PositionHoldsAPiece(pos))
+                {
+                    //can eat that piece
+                    if (!gameState.IsOwnerOfPieceAtPosition(pos, moverColor))
+                        validMoves.Add(pos);
+                    break;
+                }
+                else
+                {
                     validMoves.Add(pos);
-                break;
-            }
-            else
-            {
-                validMoves.Add(pos);
-            }
-        }
-
-        //go left until you hit a piece
-        for (int x = fromPosition.xPosition - 1; x >= 0; x--)
-        {
-            BoardPosition pos = new BoardPosition(x, fromPosition.yPosition);
-            if (gameState.PositionHoldsAPiece(pos))
-            {
-                //can eat that piece
-                if (!gameState.IsOwnerOfPieceAtPosition(pos, moverColor))
-                    validMoves.Add(pos);
-                break;
-            }
-            else
-            {
-                validMoves.Add(pos);
-            }
-
-        }
-
-        //go down until you hit a piece
-        for (int y = fromPosition.yPosition - 1; y >= 0; y--)
-        {
-            BoardPosition pos = new BoardPosition(fromPosition.xPosition, y);
-            if (gameState.PositionHoldsAPiece(pos))
-            {
-                //can eat that piece
-                if (!gameState.IsOwnerOfPieceAtPosition(pos, moverColor))
-                    validMoves.Add(pos);
-                break;
-            }
-            else
-            {
-                validMoves.Add(pos);
-            }
-        }
-
-        //go down until you hit a piece
-        for (int y = fromPosition.yPosition + 1; y <= BoardPosition.maxY; y++)
-        {
-            BoardPosition pos = new BoardPosition(fromPosition.xPosition, y);
-            if (gameState.PositionHoldsAPiece(pos))
-            {
-                //can eat that piece
-                if (!gameState.IsOwnerOfPieceAtPosition(pos, moverColor))
-                    validMoves.Add(pos);
-                break;
-            }
-            else
-            {
-                validMoves.Add(pos);
+                }
             }
         }
 

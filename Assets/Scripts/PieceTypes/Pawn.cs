@@ -12,74 +12,31 @@ public class Pawn : ScriptableObject, IPieceType
     {
         PlayerColor moverColor = gameState.GetPieceAtPosition(fromPosition).color;
         List<BoardPosition> validMoves = new();
+        int yDirection = moverColor == PlayerColor.white ? 1 : -1;
 
-        //go right until you hit a piece
-        for (int x = fromPosition.xPosition + 1; x <= BoardPosition.maxX; x++)
+        //Can move forward by one if its empty
+        BoardPosition destinationPosition = new BoardPosition(fromPosition.xPosition, fromPosition.yPosition + yDirection);
+        if (!gameState.PositionHoldsAPiece(destinationPosition))
+            validMoves.Add(destinationPosition);
+
+        //Can move forward by two if its empty on first turn
+        if (gameState.Turn <= 1)
         {
-            BoardPosition pos = new BoardPosition(x, fromPosition.yPosition);
-            if (gameState.PositionHoldsAPiece(pos))
-            {
-                //can eat that piece
-                if (!gameState.IsOwnerOfPieceAtPosition(pos, moverColor))
-                    validMoves.Add(pos);
-                break;
-            }
-            else
-            {
-                validMoves.Add(pos);
-            }
+            destinationPosition = new BoardPosition(fromPosition.xPosition, fromPosition.yPosition + 2*yDirection);
+            if (!gameState.PositionHoldsAPiece(destinationPosition))
+                validMoves.Add(destinationPosition);
         }
 
-        //go left until you hit a piece
-        for (int x = fromPosition.xPosition - 1; x >= 0; x--)
+        //Can move to diagonal by two if eating piece
+        List<int> xDirections = new() { -1, 1};
+        foreach (int xDirection in xDirections)
         {
-            BoardPosition pos = new BoardPosition(x, fromPosition.yPosition);
-            if (gameState.PositionHoldsAPiece(pos))
-            {
-                //can eat that piece
-                if (!gameState.IsOwnerOfPieceAtPosition(pos, moverColor))
-                    validMoves.Add(pos);
-                break;
-            }
-            else
-            {
-                validMoves.Add(pos);
-            }
-
-        }
-
-        //go down until you hit a piece
-        for (int y = fromPosition.yPosition - 1; y >= 0; y--)
-        {
-            BoardPosition pos = new BoardPosition(fromPosition.xPosition, y);
-            if (gameState.PositionHoldsAPiece(pos))
-            {
-                //can eat that piece
-                if (!gameState.IsOwnerOfPieceAtPosition(pos, moverColor))
-                    validMoves.Add(pos);
-                break;
-            }
-            else
-            {
-                validMoves.Add(pos);
-            }
-        }
-
-        //go down until you hit a piece
-        for (int y = fromPosition.yPosition + 1; y <= BoardPosition.maxY; y++)
-        {
-            BoardPosition pos = new BoardPosition(fromPosition.xPosition, y);
-            if (gameState.PositionHoldsAPiece(pos))
-            {
-                //can eat that piece
-                if (!gameState.IsOwnerOfPieceAtPosition(pos, moverColor))
-                    validMoves.Add(pos);
-                break;
-            }
-            else
-            {
-                validMoves.Add(pos);
-            }
+            destinationPosition = new BoardPosition(fromPosition.xPosition + 2*xDirection, fromPosition.yPosition + 2*yDirection);
+            BoardPosition jumpingOverPosition = new BoardPosition(fromPosition.xPosition + xDirection, fromPosition.yPosition + yDirection);
+            if (!gameState.PositionHoldsAPiece(destinationPosition) &&
+                gameState.PositionHoldsAPiece(jumpingOverPosition) &&
+                !gameState.IsOwnerOfPieceAtPosition(jumpingOverPosition, moverColor))
+                validMoves.Add(destinationPosition);
         }
 
         return validMoves;
