@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class BoardTile : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
@@ -13,7 +14,7 @@ public class BoardTile : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     private int yPosition;
 
     [SerializeField]
-    private SpriteRenderer highlightSprite;
+    private Image highlightImage;
 
     [SerializeField]
     private Color baseColor;
@@ -21,18 +22,20 @@ public class BoardTile : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     [SerializeField]
     private BoardInputHandler inputHandler;
 
+    [SerializeField]
+
     public BoardPosition GetBoardPosition() {
         return new BoardPosition(this.xPosition, this.yPosition);
     }
 
     public void Highlight(Color color)
     {
-        this.highlightSprite.color = color;
+        this.highlightImage.color = color;
     }
 
     internal void UnHighlight()
     {
-        this.highlightSprite.color = this.baseColor;
+        this.highlightImage.color = this.baseColor;
     }
 
     public void OnBeginDrag(PointerEventData eventData)

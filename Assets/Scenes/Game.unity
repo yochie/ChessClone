@@ -211,6 +211,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -232,6 +240,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (25)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -458,6 +474,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoardTileBlack (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -543,6 +567,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -697,6 +729,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -721,6 +761,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -876,6 +924,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -900,6 +956,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -989,6 +1053,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (27)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1146,6 +1218,14 @@ PrefabInstance:
     - target: {fileID: 6399459483014019614, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1357,6 +1437,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -1512,6 +1600,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1605,6 +1701,14 @@ PrefabInstance:
     - target: {fileID: 6399459483014019614, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1968,6 +2072,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2062,6 +2174,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -2150,6 +2270,14 @@ PrefabInstance:
     - target: {fileID: 6399459483014019614, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2242,6 +2370,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (24)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2402,6 +2538,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoardTileBlack (15)
       objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2556,6 +2700,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoardTileBlack (29)
       objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2648,6 +2800,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2796,6 +2956,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (22)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3015,6 +3183,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoardTileBlack (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3104,6 +3280,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoardTileBlack (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3192,6 +3376,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3475,6 +3667,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3496,6 +3696,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (31)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Pivot.x
@@ -3648,6 +3856,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoardTileBlack (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3737,6 +3953,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoardTileBlack (16)
       objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3822,6 +4046,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4047,6 +4279,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4145,6 +4385,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4235,6 +4483,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -4259,6 +4515,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Pivot.x
@@ -4703,6 +4967,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoardTileBlack (21)
       objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4873,6 +5145,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -4970,6 +5250,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -5058,6 +5346,14 @@ PrefabInstance:
     - target: {fileID: 6399459483014019614, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5219,6 +5515,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -5376,6 +5680,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoardTileBlack (20)
       objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -5461,6 +5773,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5693,6 +6013,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5714,6 +6042,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (17)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5929,6 +6265,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoardTileBlack (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6087,6 +6431,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -6189,6 +6541,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -6286,6 +6646,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -6310,6 +6678,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (19)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6396,6 +6772,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (26)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6694,6 +7078,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6715,6 +7107,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (18)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6866,6 +7266,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6964,6 +7372,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -7052,6 +7468,14 @@ PrefabInstance:
     - target: {fileID: 6399459483014019614, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7143,6 +7567,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (30)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7290,6 +7722,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (23)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Pivot.x
@@ -7610,6 +8050,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7707,6 +8155,14 @@ PrefabInstance:
     - target: {fileID: 6399459483014019614, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7806,6 +8262,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -7830,6 +8294,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Pivot.x
@@ -7927,6 +8399,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack (28)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8139,6 +8619,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8237,6 +8725,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8324,6 +8820,14 @@ PrefabInstance:
     - target: {fileID: 900524322828543713, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_Name
       value: BoardTileBlack
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 4751705604683271216, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     - target: {fileID: 7821464749762571987, guid: f3de47fb7f8814148801c76b4f85a77d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8551,6 +9055,14 @@ PrefabInstance:
     - target: {fileID: 6399459483014019614, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 221979727}
+    - target: {fileID: 8481806059046525181, guid: 92ec07cf6e277b046bbb71991ffddc7a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 747665805
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
