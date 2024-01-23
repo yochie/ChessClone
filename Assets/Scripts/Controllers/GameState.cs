@@ -59,7 +59,7 @@ public class GameState : NetworkBehaviour
         return this.gamePieces.ContainsKey(position);
     }
 
-    public bool IsOwnerofPieceAtPosition(BoardPosition position, PlayerColor playerColor)
+    public bool IsOwnerOfPieceAtPosition(BoardPosition position, PlayerColor playerColor)
     {
         if (!gamePieces.ContainsKey(position))
         {

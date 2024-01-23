@@ -128,7 +128,7 @@ public class GameController : NetworkBehaviour
     internal bool IOwnPieceAtTile(BoardPosition boardPosition)
     {
         PlayerColor myPlayerColor = this.localPlayer.PlayerColor;
-        return this.gameState.IsOwnerofPieceAtPosition(boardPosition, myPlayerColor);
+        return this.gameState.IsOwnerOfPieceAtPosition(boardPosition, myPlayerColor);
     }
 
     internal bool IsValidMove(GameState gamestate, BoardPosition startPosition, BoardPosition endPosition)

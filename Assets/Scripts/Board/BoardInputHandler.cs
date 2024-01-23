@@ -29,7 +29,7 @@ public class BoardInputHandler : NetworkBehaviour
         if (this.InputAllowed && 
             this.gameState.PlayerTurn == GameController.Singleton.LocalPlayer.PlayerColor &&
             this.gameState.PositionHoldsAPiece(tile.GetBoardPosition()) &&            
-            this.gameState.IsOwnerofPieceAtPosition(tile.GetBoardPosition(), GameController.Singleton.LocalPlayer.PlayerColor))
+            this.gameState.IsOwnerOfPieceAtPosition(tile.GetBoardPosition(), GameController.Singleton.LocalPlayer.PlayerColor))
         {
             //TODO: Get list of possible moves for piece at tile + create ghost version of piece
             this.boardView.HighligthTiles(new List<BoardPosition>() { tile.GetBoardPosition() });
@@ -43,15 +43,16 @@ public class BoardInputHandler : NetworkBehaviour
 
     public void OnTileDrag(BoardTile tile, Vector3 pointerWorldPosition)
     {
+        //makes piece sprite follow mouse cursor
         if(this.draggingBoardPiece)
             this.boardView.MovePieceSpriteToWorldPosition(tile.GetBoardPosition(), pointerWorldPosition);
     }
 
     public void OnTileEndDrag(BoardTile startTile)
-    {
-        this.boardView.ClearHighligths();
+    {        
         if (this.draggingBoardPiece)
         {
+            this.boardView.ClearHighligths();
             BoardPosition startPosition = startTile.GetBoardPosition();
             BoardPosition endPosition = this.HoveredTile.GetBoardPosition();
             if (GameController.Singleton.IsValidMove(this.gameState, startPosition, endPosition))
