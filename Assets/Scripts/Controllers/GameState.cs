@@ -17,6 +17,9 @@ public class GameState : NetworkBehaviour
     private PlayerColor playerTurn;
     public PlayerColor PlayerTurn { get => this.playerTurn; }
 
+    private readonly SyncDictionary<BoardPosition, List<BoardPosition>> possibleMoves = new();
+
+    [Server]
     public void Init(Dictionary<BoardPosition, GamePieceID> gamePieces, PlayerColor playerTurn)
     {
         foreach(var (position, gamePieceID) in gamePieces)
@@ -24,6 +27,7 @@ public class GameState : NetworkBehaviour
             this.gamePieces.Add(position, gamePieceID);
         }
         this.playerTurn = playerTurn;
+        this.UpdatePossibleMoves();
     }
 
     #region State modifiers
@@ -37,6 +41,7 @@ public class GameState : NetworkBehaviour
         GamePieceID toMove = this.gamePieces[from];
         this.gamePieces.Remove(from);
         this.gamePieces[to] = toMove;
+        this.UpdatePossibleMoves();
     }
 
     [Server]
@@ -47,6 +52,7 @@ public class GameState : NetworkBehaviour
             Debug.Log("Couldn't find piece to remove");
         }
         this.gamePieces.Remove(position);
+        this.UpdatePossibleMoves();
     }
 
     [Server]
@@ -88,12 +94,24 @@ public class GameState : NetworkBehaviour
             Debug.Log("Invalid move : start == end");
             return false;
         }
+
+        if(!possibleMoves.ContainsKey(startPosition))
+        {
+            Debug.Log("Invalid move : start position is not set as possible move");
+            return false;
+        }
+
+        if (!possibleMoves[startPosition].Contains(endPosition))
+        {
+            Debug.Log("Invalid move : end position is not set as possible move from start");
+            return false;
+        }
         return true;
     }
 
     internal GamePieceID GetPieceAtPosition(BoardPosition fromPosition)
     {
-        if (!gamePieces.ContainsKey(fromPosition))
+        if (!this.gamePieces.ContainsKey(fromPosition))
         {
             Debug.Log("No piece at requested position. Make sure you validate before sending request.");
             return new GamePieceID(PlayerColor.white, PieceTypeID.none, -1);
@@ -103,10 +121,25 @@ public class GameState : NetworkBehaviour
 
     internal List<BoardPosition> GetPossibleMovesFrom(BoardPosition boardPosition)
     {
-        GamePieceID pieceID = this.gamePieces[boardPosition];
-        IPieceType pieceType = this.pieceTypes.GetPieceTypeForByID(pieceID.typeID);        
-        //TODO: filter out moves that would put you in check mate
-        return pieceType.GetPossibleMovesFrom(this, boardPosition);
+
+        if (!this.possibleMoves.ContainsKey(boardPosition))
+        {
+            Debug.Log("No possible moves set for given position.");
+            return new List<BoardPosition>();
+        }
+        return this.possibleMoves[boardPosition];
+    }
+
+    public void UpdatePossibleMoves()
+    {
+        this.possibleMoves.Clear();
+        foreach(var (position, gamePieceID) in this.gamePieces)
+        {
+            IPieceType pieceType = this.pieceTypes.GetPieceTypeForByID(gamePieceID.typeID);
+            List<BoardPosition> possibleMovesFromPosition = pieceType.GetPossibleMovesFrom(this, position);
+            //TODO: filter out moves that would put you in check mate
+            this.possibleMoves.Add(position, possibleMovesFromPosition);
+        }
     }
     #endregion
 }

@@ -42,13 +42,6 @@ public class GameController : NetworkBehaviour
         GameController.Singleton = this;
     }
 
-    public override void OnStartServer()
-    {
-        base.OnStartServer();
-
-        this.InitializeGameStateFromBoardView();
-    }
-
     [Server]
     private void InitializeGameStateFromBoardView()
     {
@@ -72,6 +65,8 @@ public class GameController : NetworkBehaviour
                 this.RpcPlayerAssignColor(player, PlayerColor.black);
             index++;
         }
+
+        this.InitializeGameStateFromBoardView();
 
         this.boardInputHandler.RpcSetInputAllowed();
     }
