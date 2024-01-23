@@ -6,16 +6,21 @@ using UnityEngine;
 public readonly struct BoardPosition
 {
     //left to right, bottom to top, 0 indexed
-    public readonly int xPosition;
-    public readonly int yPosition;
+    public readonly short xPosition;
+    public readonly short yPosition;
 
-    public static readonly int maxX = 7;
-    public static readonly int maxY = 7;
+    public static readonly short maxX = 7;
+    public static readonly short maxY = 7;
 
     public BoardPosition(int x, int y)
     {
-        this.xPosition = x;
-        this.yPosition = y;
+        this.xPosition = (short) x;
+        this.yPosition = (short) y;
+    }
+
+    public BoardPosition Add(Vector2Int vector)
+    {
+        return new BoardPosition(this.xPosition + vector.x, this.yPosition + vector.y)
     }
 
     public override bool Equals(object obj)

@@ -16,7 +16,7 @@ public class King : ScriptableObject, IPieceType
         //go right until you hit a piece
         for (int x = fromPosition.xPosition + 1; x <= BoardPosition.maxX; x++)
         {
-            BoardPosition pos = new BoardPosition(x, fromPosition.yPosition);
+            BoardPosition pos = new BoardPosition((short) x, fromPosition.yPosition);
             if (gameState.PositionHoldsAPiece(pos))
             {
                 //can eat that piece
@@ -33,7 +33,7 @@ public class King : ScriptableObject, IPieceType
         //go left until you hit a piece
         for (int x = fromPosition.xPosition - 1; x >= 0; x--)
         {
-            BoardPosition pos = new BoardPosition(x, fromPosition.yPosition);
+            BoardPosition pos = new BoardPosition((short) x, fromPosition.yPosition);
             if (gameState.PositionHoldsAPiece(pos))
             {
                 //can eat that piece
@@ -51,7 +51,7 @@ public class King : ScriptableObject, IPieceType
         //go down until you hit a piece
         for (int y = fromPosition.yPosition - 1; y >= 0; y--)
         {
-            BoardPosition pos = new BoardPosition(fromPosition.xPosition, y);
+            BoardPosition pos = new BoardPosition(fromPosition.xPosition, (short) y);
             if (gameState.PositionHoldsAPiece(pos))
             {
                 //can eat that piece
@@ -68,7 +68,7 @@ public class King : ScriptableObject, IPieceType
         //go down until you hit a piece
         for (int y = fromPosition.yPosition + 1; y <= BoardPosition.maxY; y++)
         {
-            BoardPosition pos = new BoardPosition(fromPosition.xPosition, y);
+            BoardPosition pos = new BoardPosition(fromPosition.xPosition, (short) y);
             if (gameState.PositionHoldsAPiece(pos))
             {
                 //can eat that piece

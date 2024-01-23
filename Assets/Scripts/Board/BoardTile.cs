@@ -25,7 +25,7 @@ public class BoardTile : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     [SerializeField]
 
     public BoardPosition GetBoardPosition() {
-        return new BoardPosition(this.xPosition, this.yPosition);
+        return new BoardPosition((short) this.xPosition, (short) this.yPosition);
     }
 
     public void Highlight(Color color)

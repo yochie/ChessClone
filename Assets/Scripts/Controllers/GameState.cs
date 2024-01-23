@@ -11,13 +11,19 @@ public class GameState : NetworkBehaviour
     [SerializeField]
     private PieceTypeData pieceTypes;
 
+    #region Sync
     private readonly SyncDictionary<BoardPosition, GamePieceID> gamePieces = new();
 
     [SyncVar]
     private PlayerColor playerTurn;
     public PlayerColor PlayerTurn { get => this.playerTurn; }
 
+    [SyncVar]
+    private int turn;
+    public int Turn { get => this.turn; }
+
     private readonly SyncDictionary<BoardPosition, List<BoardPosition>> possibleMoves = new();
+    #endregion
 
     [Server]
     public void Init(Dictionary<BoardPosition, GamePieceID> gamePieces, PlayerColor playerTurn)
@@ -27,6 +33,7 @@ public class GameState : NetworkBehaviour
             this.gamePieces.Add(position, gamePieceID);
         }
         this.playerTurn = playerTurn;
+        this.turn = 0;
         this.UpdatePossibleMoves();
     }
 
@@ -62,6 +69,7 @@ public class GameState : NetworkBehaviour
             this.playerTurn = PlayerColor.black;
         else
             this.playerTurn = PlayerColor.white;
+        this.turn++;
     }
     #endregion
 
