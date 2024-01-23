@@ -159,6 +159,12 @@ public class MyNetworkManager : NetworkManager
     /// <param name="conn">Connection from client.</param>
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
     {
+        Debug.Log("Client disconnected, closing host");
+        //Only disconnet when remote player disconnects, local player already handles this and would cause recusion here
+        if (conn != null && conn.identity != null && !conn.identity.isLocalPlayer && NetworkServer.active)
+        {
+            this.StopHost();
+        }
         base.OnServerDisconnect(conn);
     }
 
