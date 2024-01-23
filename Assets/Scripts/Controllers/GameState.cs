@@ -14,6 +14,8 @@ public class GameState : NetworkBehaviour
     #region Sync
     private readonly SyncDictionary<BoardPosition, GamePieceID> gamePieces = new();
 
+    private readonly SyncDictionary<GamePieceID, bool> pawnHasMoved = new();
+
     [SyncVar]
     private PlayerColor playerTurn;
     public PlayerColor PlayerTurn { get => this.playerTurn; }
@@ -31,6 +33,8 @@ public class GameState : NetworkBehaviour
         foreach(var (position, gamePieceID) in gamePieces)
         {
             this.gamePieces.Add(position, gamePieceID);
+            if (gamePieceID.typeID == PieceTypeID.pawn)
+                this.pawnHasMoved.Add(gamePieceID, false);
         }
         this.playerTurn = playerTurn;
         this.turn = 0;
@@ -48,6 +52,8 @@ public class GameState : NetworkBehaviour
         GamePieceID toMove = this.gamePieces[from];
         this.gamePieces.Remove(from);
         this.gamePieces[to] = toMove;
+        if (toMove.typeID == PieceTypeID.pawn)
+            this.pawnHasMoved[toMove] = true;
         this.UpdatePossibleMoves();
     }
 
@@ -148,6 +154,16 @@ public class GameState : NetworkBehaviour
             //TODO: filter out moves that would put you in check mate
             this.possibleMoves.Add(position, possibleMovesFromPosition);
         }
+    }
+
+    public bool HasPawnMoved(GamePieceID pawnID)
+    {
+        if(!this.pawnHasMoved.ContainsKey(pawnID))
+        {
+            Debug.LogFormat("Couldn't determine if pawn {0} has moved, it wasn't in dictionary", pawnID);
+            return false;
+        }
+        return this.pawnHasMoved[pawnID];
     }
     #endregion
 }

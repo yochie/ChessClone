@@ -12,6 +12,7 @@ public class Pawn : ScriptableObject, IPieceType
     {
         PlayerColor moverColor = gameState.GetPieceAtPosition(fromPosition).color;
         List<BoardPosition> validMoves = new();
+        GamePieceID pawnID = gameState.GetPieceAtPosition(fromPosition);
         int yDirection = moverColor == PlayerColor.white ? 1 : -1;
 
         //Can move forward by one if its empty
@@ -19,8 +20,8 @@ public class Pawn : ScriptableObject, IPieceType
         if (!gameState.PositionHoldsAPiece(destinationPosition))
             validMoves.Add(destinationPosition);
 
-        //Can move forward by two if its empty on first turn
-        if (gameState.Turn <= 1)
+        //Can move forward by two if its empty on first move
+        if (!gameState.HasPawnMoved(pawnID))
         {
             destinationPosition = new BoardPosition(fromPosition.xPosition, fromPosition.yPosition + 2*yDirection);
             if (!gameState.PositionHoldsAPiece(destinationPosition))
@@ -31,11 +32,9 @@ public class Pawn : ScriptableObject, IPieceType
         List<int> xDirections = new() { -1, 1};
         foreach (int xDirection in xDirections)
         {
-            destinationPosition = new BoardPosition(fromPosition.xPosition + 2*xDirection, fromPosition.yPosition + 2*yDirection);
-            BoardPosition jumpingOverPosition = new BoardPosition(fromPosition.xPosition + xDirection, fromPosition.yPosition + yDirection);
-            if (!gameState.PositionHoldsAPiece(destinationPosition) &&
-                gameState.PositionHoldsAPiece(jumpingOverPosition) &&
-                !gameState.IsOwnerOfPieceAtPosition(jumpingOverPosition, moverColor))
+            destinationPosition = new BoardPosition(fromPosition.xPosition + xDirection, fromPosition.yPosition + yDirection);
+            if (gameState.PositionHoldsAPiece(destinationPosition) &&
+                !gameState.IsOwnerOfPieceAtPosition(destinationPosition, moverColor))
                 validMoves.Add(destinationPosition);
         }
 
