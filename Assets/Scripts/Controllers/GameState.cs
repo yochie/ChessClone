@@ -24,6 +24,7 @@ public class GameState : NetworkBehaviour
     }
 
     #region State modifiers
+    [Server]
     internal void MovePiece(BoardPosition from, BoardPosition to)
     {
         if (!gamePieces.ContainsKey(from))
@@ -35,6 +36,7 @@ public class GameState : NetworkBehaviour
         this.gamePieces[to] = toMove;
     }
 
+    [Server]
     internal void DeletePieceAt(BoardPosition position)
     {
         if (!gamePieces.ContainsKey(position))
@@ -44,6 +46,7 @@ public class GameState : NetworkBehaviour
         this.gamePieces.Remove(position);
     }
 
+    [Server]
     public void ChangeTurn()
     {
         if (this.playerTurn == PlayerColor.white)
@@ -73,7 +76,20 @@ public class GameState : NetworkBehaviour
         else
             return false;
     }
+
+    internal bool IsValidMove(BoardPosition startPosition, BoardPosition endPosition)
+    {
+        //todo : validate move
+        if (startPosition.Equals(endPosition))
+        {
+            Debug.Log("Invalid move : start == end");
+            return false;
+        }
+        return true;
+    }
     #endregion
+
+
 }
 
 public readonly struct GamePieceID

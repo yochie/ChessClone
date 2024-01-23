@@ -38,6 +38,10 @@ public class BoardInputHandler : NetworkBehaviour
         else
         {
             Debug.Log("Dragging not allowed");
+            //Debug.Log(this.InputAllowed);
+            //Debug.Log(this.gameState.PlayerTurn == GameController.Singleton.LocalPlayer.PlayerColor);
+            //Debug.Log(this.gameState.PositionHoldsAPiece(tile.GetBoardPosition()));
+            //Debug.Log(this.gameState.IsOwnerOfPieceAtPosition(tile.GetBoardPosition(), GameController.Singleton.LocalPlayer.PlayerColor));
         }
     }
 
@@ -54,20 +58,36 @@ public class BoardInputHandler : NetworkBehaviour
         {
             this.boardView.ClearHighligths();
             BoardPosition startPosition = startTile.GetBoardPosition();
+            if (this.HoveredTile == null)
+            {
+                this.AbortDrag(startPosition);
+                return;
+            }
             BoardPosition endPosition = this.HoveredTile.GetBoardPosition();
-            if (GameController.Singleton.IsValidMove(this.gameState, startPosition, endPosition))
+            if (this.gameState.IsValidMove(startPosition, endPosition))
+            {                
                 GameController.Singleton.CmdTryMove(startPosition, endPosition);
+                this.draggingBoardPiece = false;
+                return;
+            }
             else
             {
-                this.boardView.MovePieceSpriteToBoardPosition(startTile.GetBoardPosition(), startTile.GetBoardPosition());
+                this.AbortDrag(startPosition);
+                return;
             }
-            this.draggingBoardPiece = false;
         }
+    }
+
+    private void AbortDrag(BoardPosition returnTo)
+    {
+        this.boardView.MovePieceSpriteToBoardPosition(returnTo, returnTo);
+        this.draggingBoardPiece = false;
     }
 
     [ClientRpc]
     public void RpcSetInputAllowed()
     {
+        Debug.Log("Input allowed");
         this.InputAllowed = true;
     }
 

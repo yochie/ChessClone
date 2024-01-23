@@ -68,26 +68,26 @@ public class BoardView : MonoBehaviour
         }
     }
 
-    internal void MovePieceSpriteToWorldPosition(BoardPosition boardPositionStart, Vector3 worldPositionEnd)
+    internal void MovePieceSpriteToWorldPosition(BoardPosition spriteStoredAtPosition, Vector3 destinationWorldPosition)
     {
-        if (!this.pieces.ContainsKey(boardPositionStart))
+        if (!this.pieces.ContainsKey(spriteStoredAtPosition))
             return;
 
-        this.pieces[boardPositionStart].transform.position = worldPositionEnd;
+        this.pieces[spriteStoredAtPosition].transform.position = destinationWorldPosition;
     }
 
-    internal void MovePieceSpriteToBoardPosition(BoardPosition boardPositionStart, BoardPosition boardPositionEnd)
+    internal void MovePieceSpriteToBoardPosition(BoardPosition spriteStoredAtPosition, BoardPosition destinationBoardPosition)
     {
-        if (!this.pieces.ContainsKey(boardPositionStart))
+        if (!this.pieces.ContainsKey(spriteStoredAtPosition))
             return;
 
-        if (!this.tiles.ContainsKey(boardPositionEnd))
+        if (!this.tiles.ContainsKey(destinationBoardPosition))
         {
             Debug.Log("Couldn't find tile for end board position");
             return;
         }
-        Vector3 worldPositionEnd = this.tiles[boardPositionEnd].transform.position;
-        this.pieces[boardPositionStart].transform.position = worldPositionEnd;
+        Vector3 worldPositionEnd = this.tiles[destinationBoardPosition].transform.position;
+        this.pieces[spriteStoredAtPosition].transform.position = worldPositionEnd;
     }
     #endregion
 }
