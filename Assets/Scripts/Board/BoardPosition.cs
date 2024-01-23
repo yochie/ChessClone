@@ -9,6 +9,9 @@ public readonly struct BoardPosition
     public readonly int xPosition;
     public readonly int yPosition;
 
+    public static readonly int maxX = 7;
+    public static readonly int maxY = 7;
+
     public BoardPosition(int x, int y)
     {
         this.xPosition = x;
@@ -25,5 +28,10 @@ public readonly struct BoardPosition
     public override int GetHashCode()
     {
         return HashCode.Combine(this.xPosition, this.yPosition);
+    }
+
+    public override string ToString()
+    {
+        return string.Format("({0}, {1})", this.xPosition, this.yPosition);
     }
 }

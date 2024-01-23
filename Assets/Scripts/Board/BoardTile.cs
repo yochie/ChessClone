@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,9 +25,14 @@ public class BoardTile : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
         return new BoardPosition(this.xPosition, this.yPosition);
     }
 
-    public void Highlight(bool highlighted)
+    public void Highlight(Color color)
     {
-        this.highlightSprite.color = highlighted ? Color.green : this.baseColor;
+        this.highlightSprite.color = color;
+    }
+
+    internal void UnHighlight()
+    {
+        this.highlightSprite.color = this.baseColor;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -53,4 +59,6 @@ public class BoardTile : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     {
         this.inputHandler.HoveredTile = null;
     }
+
+
 }

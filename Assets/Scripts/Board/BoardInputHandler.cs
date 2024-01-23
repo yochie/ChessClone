@@ -32,7 +32,12 @@ public class BoardInputHandler : NetworkBehaviour
             this.gameState.IsOwnerOfPieceAtPosition(tile.GetBoardPosition(), GameController.Singleton.LocalPlayer.PlayerColor))
         {
             //TODO: Get list of possible moves for piece at tile + create ghost version of piece
-            this.boardView.HighligthTiles(new List<BoardPosition>() { tile.GetBoardPosition() });
+            //highlight start position
+            this.boardView.HighligthTiles(new List<BoardPosition>() { tile.GetBoardPosition() }, Color.blue);
+            //highlight valid moves           
+            List<BoardPosition> possibleMoves = this.gameState.GetPossibleMovesFrom(tile.GetBoardPosition());
+            //Debug.Log(possibleMoves.Count);
+            this.boardView.HighligthTiles(possibleMoves, Color.green);
             this.draggingBoardPiece = true;
         }
         else

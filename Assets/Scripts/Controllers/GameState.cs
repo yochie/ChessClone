@@ -8,8 +8,11 @@ using System;
 //Raw data that defines game logical state
 public class GameState : NetworkBehaviour
 {
+    [SerializeField]
+    private PieceTypeData pieceTypes;
+
     private readonly SyncDictionary<BoardPosition, GamePieceID> gamePieces = new();
-    
+
     [SyncVar]
     private PlayerColor playerTurn;
     public PlayerColor PlayerTurn { get => this.playerTurn; }
@@ -87,9 +90,25 @@ public class GameState : NetworkBehaviour
         }
         return true;
     }
+
+    internal GamePieceID GetPieceAtPosition(BoardPosition fromPosition)
+    {
+        if (!gamePieces.ContainsKey(fromPosition))
+        {
+            Debug.Log("No piece at requested position. Make sure you validate before sending request.");
+            return new GamePieceID(PlayerColor.white, PieceTypeID.none, -1);
+        }
+        return gamePieces[fromPosition];
+    }
+
+    internal List<BoardPosition> GetPossibleMovesFrom(BoardPosition boardPosition)
+    {
+        GamePieceID pieceID = this.gamePieces[boardPosition];
+        IPieceType pieceType = this.pieceTypes.GetPieceTypeForByID(pieceID.typeID);        
+        //TODO: filter out moves that would put you in check mate
+        return pieceType.GetPossibleMovesFrom(this, boardPosition);
+    }
     #endregion
-
-
 }
 
 public readonly struct GamePieceID
@@ -104,6 +123,11 @@ public readonly struct GamePieceID
         this.typeID = typeID;
         this.index = index;
     }
+
+    public override string ToString()
+    {
+        return string.Format("{0} {1} ({2})", color, typeID, index);
+    }
 }
 
 public enum PlayerColor
@@ -113,5 +137,5 @@ public enum PlayerColor
 
 public enum PieceTypeID
 {
-    rook, knight, bishop, king, queen, pawn
+    rook, knight, bishop, king, queen, pawn, none
 }

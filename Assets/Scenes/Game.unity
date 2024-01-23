@@ -1732,6 +1732,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  pieceTypes: {fileID: 11400000, guid: f4fa440c97329e547958289e8c7a548f, type: 2}
 --- !u!4 &288464416
 Transform:
   m_ObjectHideFlags: 0

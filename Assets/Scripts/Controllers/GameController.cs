@@ -103,12 +103,18 @@ public class GameController : NetworkBehaviour
         //validate on server, even though it will have been done clientsice, just to be sure
         if (this.gameState.IsValidMove(from, to))
         {
+            Debug.LogFormat("{0} moved from {1} to {2}", this.gameState.GetPieceAtPosition(from), from, to);
             //Update game state
             this.gameState.MovePiece(from, to);
             this.gameState.ChangeTurn();
-            Debug.Log(this.gameState.PlayerTurn);
+            //Debug.Log(this.gameState.PlayerTurn);
             //Perform clientside ui updates
             this.RpcUpdateBoardViewForMove(from, to);
+            
+        }
+        else
+        {
+            Debug.LogFormat("Failed to move {0} from {1} to {2}", this.gameState.GetPieceAtPosition(from), from, to);
         }
     }
     #endregion

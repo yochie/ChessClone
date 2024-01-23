@@ -54,17 +54,17 @@ public class BoardView : MonoBehaviour
     #endregion
 
     #region Visual modifications
-    public void HighligthTiles(List<BoardPosition> positions){
+    public void HighligthTiles(List<BoardPosition> positions, Color color){
         foreach(BoardPosition position in positions)
         {
-            this.tiles[position].Highlight(true);
+            this.tiles[position].Highlight(color);
         }
     }
     public void ClearHighligths()
     {
         foreach (BoardTile tile in tiles.Values)
         {
-            tile.Highlight(false);
+            tile.UnHighlight();
         }
     }
 
