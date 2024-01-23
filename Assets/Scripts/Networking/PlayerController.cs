@@ -12,7 +12,7 @@ public class PlayerController : NetworkBehaviour
 
     public void AssignColor(PlayerColor color)
     {
-        Debug.LogFormat("Color assigned : {0}", color);
+        //Debug.LogFormat("Color assigned : {0}", color);
         this.playerColor = color;
     } 
 

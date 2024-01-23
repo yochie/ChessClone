@@ -22,8 +22,6 @@ public class BoardTile : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     [SerializeField]
     private BoardInputHandler inputHandler;
 
-    [SerializeField]
-
     public BoardPosition GetBoardPosition() {
         return new BoardPosition((short) this.xPosition, (short) this.yPosition);
     }

@@ -5,5 +5,5 @@ using UnityEngine;
 public interface IPieceType
 {
     public PieceTypeID ForPieceTypeID { get; set; }
-    public List<BoardPosition> GetPossibleMovesFrom(GameState gameState, BoardPosition fromPosition);
+    public List<Move> GetPossibleMovesFrom(GameState gameState, BoardPosition fromPosition);
 }

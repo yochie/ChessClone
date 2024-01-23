@@ -93,33 +93,35 @@ public class GameController : NetworkBehaviour
 
 
     [Command(requiresAuthority = false)]
-    public void CmdTryMove(BoardPosition from, BoardPosition to)
+    public void CmdTryMove(Move move)
     {
         //validate on server, even though it will have been done clientsice, just to be sure
-        if (this.gameState.IsValidMove(from, to))
+        if (this.gameState.IsValidMove(move))
         {
-            Debug.LogFormat("{0} moved from {1} to {2}", this.gameState.GetPieceAtPosition(from), from, to);
+            Debug.LogFormat("{0} moved from {1} to {2}", this.gameState.GetPieceAtPosition(move.from), move.from, move.to);
             //Update game state
-            this.gameState.MovePiece(from, to);
-            this.gameState.ChangeTurn();
-            //Debug.Log(this.gameState.PlayerTurn);
+            this.gameState.MovePiece(move);
             //Perform clientside ui updates
-            this.RpcUpdateBoardViewForMove(from, to);
-            
+            this.RpcUpdateBoardViewForMove(move);            
         }
         else
         {
-            Debug.LogFormat("Failed to move {0} from {1} to {2}", this.gameState.GetPieceAtPosition(from), from, to);
+            Debug.LogFormat("Failed to move {0} from {1} to {2}", this.gameState.GetPieceAtPosition(move.from), move.from, move.to);
         }
     }
     #endregion
 
     #region Rpcs
     [ClientRpc]
-    private void RpcUpdateBoardViewForMove(BoardPosition from, BoardPosition to)
+    private void RpcUpdateBoardViewForMove(Move move)
     {
-        this.boardView.MovePieceSpriteToBoardPosition(from, to);
-        this.boardView.UpdatePiecePosition(from, to);
+        if (move.eats)
+        {
+            this.boardView.DestroyPieceSprite(move.eatPosition);
+            this.boardView.RemovePieceAtPosition(move.eatPosition);
+        }
+        this.boardView.MovePieceSpriteToBoardPosition(move.from, move.to);
+        this.boardView.UpdatePiecePosition(move.from, move.to);
     }
 
     [ClientRpc]

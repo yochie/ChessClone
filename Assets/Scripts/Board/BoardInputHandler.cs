@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using System.Linq;
 
 public class BoardInputHandler : NetworkBehaviour
 {
@@ -25,28 +26,20 @@ public class BoardInputHandler : NetworkBehaviour
     }
 
     public void OnTileBeginDrag(BoardTile tile)
-    {        
+    {
+        BoardPosition tilePosition = tile.GetBoardPosition();
         if (this.InputAllowed && 
             this.gameState.PlayerTurn == GameController.Singleton.LocalPlayer.PlayerColor &&
-            this.gameState.PositionHoldsAPiece(tile.GetBoardPosition()) &&            
-            this.gameState.IsOwnerOfPieceAtPosition(tile.GetBoardPosition(), GameController.Singleton.LocalPlayer.PlayerColor))
+            this.gameState.PositionHoldsAPiece(tilePosition) &&            
+            this.gameState.IsOwnerOfPieceAtPosition(tilePosition, GameController.Singleton.LocalPlayer.PlayerColor))
         {
-            //TODO: Get list of possible moves for piece at tile + create ghost version of piece
             //highlight start position
-            this.boardView.HighligthTiles(new List<BoardPosition>() { tile.GetBoardPosition() }, Color.blue);
-            //highlight valid moves           
-            List<BoardPosition> possibleMoves = this.gameState.GetPossibleMovesFrom(tile.GetBoardPosition());
-            //Debug.Log(possibleMoves.Count);
-            this.boardView.HighligthTiles(possibleMoves, Color.green);
+            this.boardView.HighligthTiles(new List<BoardPosition>() { tilePosition }, Color.blue);
+            //highlight possible moves           
+            List<Move> possibleMoves = this.gameState.GetPossibleMovesFrom(tilePosition);
+            this.boardView.HighligthTiles(possibleMoves.Select(move => move.to).ToList(), Color.green);
+
             this.draggingBoardPiece = true;
-        }
-        else
-        {
-            Debug.Log("Dragging not allowed");
-            //Debug.Log(this.InputAllowed);
-            //Debug.Log(this.gameState.PlayerTurn == GameController.Singleton.LocalPlayer.PlayerColor);
-            //Debug.Log(this.gameState.PositionHoldsAPiece(tile.GetBoardPosition()));
-            //Debug.Log(this.gameState.IsOwnerOfPieceAtPosition(tile.GetBoardPosition(), GameController.Singleton.LocalPlayer.PlayerColor));
         }
     }
 
@@ -58,29 +51,43 @@ public class BoardInputHandler : NetworkBehaviour
     }
 
     public void OnTileEndDrag(BoardTile startTile)
-    {        
-        if (this.draggingBoardPiece)
+    {
+        if (!this.draggingBoardPiece)
+            return;
+
+        this.boardView.ClearHighligths();
+        BoardPosition startPosition = startTile.GetBoardPosition();
+
+        if (this.HoveredTile == null)
         {
-            this.boardView.ClearHighligths();
-            BoardPosition startPosition = startTile.GetBoardPosition();
-            if (this.HoveredTile == null)
-            {
-                this.AbortDrag(startPosition);
-                return;
-            }
-            BoardPosition endPosition = this.HoveredTile.GetBoardPosition();
-            if (this.gameState.IsValidMove(startPosition, endPosition))
-            {                
-                GameController.Singleton.CmdTryMove(startPosition, endPosition);
-                this.draggingBoardPiece = false;
-                return;
-            }
-            else
-            {
-                this.AbortDrag(startPosition);
-                return;
-            }
+            this.AbortDrag(startPosition);
+            return;
         }
+        BoardPosition endPosition = this.HoveredTile.GetBoardPosition();
+
+        List<Move> possibleMoves = this.gameState.GetPossibleMovesFrom(startPosition);
+        List<Move> movesToDestination = possibleMoves.Where(move => move.to.Equals(endPosition)).ToList();
+        if(movesToDestination.Count == 0)
+        {
+            this.AbortDrag(startPosition);
+            return;
+        } else if (movesToDestination.Count > 1)
+        {
+            Debug.Log("More than one move leads to dest, defaulting to first");
+        }
+        Move move = movesToDestination[0];
+        if (this.gameState.IsValidMove(move))
+        {
+            GameController.Singleton.CmdTryMove(move);
+            this.draggingBoardPiece = false;
+            return;
+        }
+        else
+        {
+            this.AbortDrag(startPosition);
+            return;
+        }
+        
     }
 
     private void AbortDrag(BoardPosition returnTo)

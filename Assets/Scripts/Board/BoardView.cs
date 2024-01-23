@@ -51,6 +51,11 @@ public class BoardView : MonoBehaviour
         toMove.transform.parent = this.tiles[endPosition].transform;
         this.pieces[endPosition] = toMove;
     }
+
+    internal void RemovePieceAtPosition(BoardPosition positionToRemove)
+    {
+        this.pieces.Remove(positionToRemove);
+    }
     #endregion
 
     #region Visual modifications
@@ -88,6 +93,15 @@ public class BoardView : MonoBehaviour
         }
         Vector3 worldPositionEnd = this.tiles[destinationBoardPosition].transform.position;
         this.pieces[spriteStoredAtPosition].transform.position = worldPositionEnd;
+    }
+
+    internal void DestroyPieceSprite(BoardPosition eatPosition)
+    {
+        if(!this.pieces.ContainsKey(eatPosition))
+            return;
+
+        Destroy(this.pieces[eatPosition].gameObject);
+
     }
     #endregion
 }

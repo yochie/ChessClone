@@ -8,36 +8,41 @@ public class Pawn : ScriptableObject, IPieceType
     [field: SerializeField]
     public PieceTypeID ForPieceTypeID { get; set; }
 
-    public List<BoardPosition> GetPossibleMovesFrom(GameState gameState, BoardPosition fromPosition)
+    public List<Move> GetPossibleMovesFrom(GameState gameState, BoardPosition fromPosition)
     {
         PlayerColor moverColor = gameState.GetPieceAtPosition(fromPosition).color;
-        List<BoardPosition> validMoves = new();
+        List<Move> possibleMoves = new();
         GamePieceID pawnID = gameState.GetPieceAtPosition(fromPosition);
         int yDirection = moverColor == PlayerColor.white ? 1 : -1;
 
-        //Can move forward by one if its empty
+        //Forward 1
         BoardPosition destinationPosition = new BoardPosition(fromPosition.xPosition, fromPosition.yPosition + yDirection);
-        if (!gameState.PositionHoldsAPiece(destinationPosition))
-            validMoves.Add(destinationPosition);
+        if (destinationPosition.IsOnBoard() && !gameState.PositionHoldsAPiece(destinationPosition))
+            possibleMoves.Add(new Move(fromPosition, destinationPosition, eats: false));
 
-        //Can move forward by two if its empty on first move
+        //Forward 2
         if (!gameState.HasPawnMoved(pawnID))
         {
+            BoardPosition intermediateTile = new BoardPosition(fromPosition.xPosition, fromPosition.yPosition + yDirection);
             destinationPosition = new BoardPosition(fromPosition.xPosition, fromPosition.yPosition + 2*yDirection);
-            if (!gameState.PositionHoldsAPiece(destinationPosition))
-                validMoves.Add(destinationPosition);
+            if (intermediateTile.IsOnBoard() &&
+                !gameState.PositionHoldsAPiece(intermediateTile) &&
+                destinationPosition.IsOnBoard() &&
+                !gameState.PositionHoldsAPiece(destinationPosition))
+                possibleMoves.Add(new Move(fromPosition, destinationPosition, eats: false));
         }
 
-        //Can move to diagonal by two if eating piece
+        //Diagonal 1
         List<int> xDirections = new() { -1, 1};
         foreach (int xDirection in xDirections)
         {
             destinationPosition = new BoardPosition(fromPosition.xPosition + xDirection, fromPosition.yPosition + yDirection);
-            if (gameState.PositionHoldsAPiece(destinationPosition) &&
+            if (destinationPosition.IsOnBoard() && 
+                gameState.PositionHoldsAPiece(destinationPosition) &&
                 !gameState.IsOwnerOfPieceAtPosition(destinationPosition, moverColor))
-                validMoves.Add(destinationPosition);
+                possibleMoves.Add(new Move(fromPosition, destinationPosition, eats: true, eatPosition: destinationPosition));
         }
 
-        return validMoves;
+        return possibleMoves;
     }
 }

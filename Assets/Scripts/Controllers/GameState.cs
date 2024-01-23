@@ -11,7 +11,7 @@ public class GameState : NetworkBehaviour
     [SerializeField]
     private PieceTypeData pieceTypes;
 
-    #region Sync
+    #region Synced
     private readonly SyncDictionary<BoardPosition, GamePieceID> gamePieces = new();
 
     private readonly SyncDictionary<GamePieceID, bool> pawnHasMoved = new();
@@ -24,13 +24,14 @@ public class GameState : NetworkBehaviour
     private int turn;
     public int Turn { get => this.turn; }
 
-    private readonly SyncDictionary<BoardPosition, List<BoardPosition>> possibleMoves = new();
+    private readonly SyncDictionary<BoardPosition, List<Move>> possibleMoves = new();
     #endregion
 
+    #region State modifiers
     [Server]
     public void Init(Dictionary<BoardPosition, GamePieceID> gamePieces, PlayerColor playerTurn)
     {
-        foreach(var (position, gamePieceID) in gamePieces)
+        foreach (var (position, gamePieceID) in gamePieces)
         {
             this.gamePieces.Add(position, gamePieceID);
             if (gamePieceID.typeID == PieceTypeID.pawn)
@@ -41,41 +42,64 @@ public class GameState : NetworkBehaviour
         this.UpdatePossibleMoves();
     }
 
-    #region State modifiers
     [Server]
-    internal void MovePiece(BoardPosition from, BoardPosition to)
+    public void MovePiece(Move move)
     {
-        if (!gamePieces.ContainsKey(from))
+        if (!gamePieces.ContainsKey(move.from))
         {
-            Debug.Log("Couldn't find piece for tile");
+            Debug.Log("Couldn't find piece to move");
+            return;
         }
-        GamePieceID toMove = this.gamePieces[from];
-        this.gamePieces.Remove(from);
-        this.gamePieces[to] = toMove;
+
+        if (move.eats)
+        {
+            BoardPosition toEat = move.eatPosition;
+            this.DeletePieceAt(toEat);
+        }
+
+        GamePieceID toMove = this.gamePieces[move.from];
+        this.gamePieces.Remove(move.from);
+        this.gamePieces[move.to] = toMove;
+
         if (toMove.typeID == PieceTypeID.pawn)
             this.pawnHasMoved[toMove] = true;
+
+        this.ChangeTurn();
+
         this.UpdatePossibleMoves();
     }
 
     [Server]
-    internal void DeletePieceAt(BoardPosition position)
+    private void DeletePieceAt(BoardPosition position)
     {
         if (!gamePieces.ContainsKey(position))
         {
             Debug.Log("Couldn't find piece to remove");
         }
         this.gamePieces.Remove(position);
-        this.UpdatePossibleMoves();
     }
 
     [Server]
-    public void ChangeTurn()
+    private void ChangeTurn()
     {
         if (this.playerTurn == PlayerColor.white)
             this.playerTurn = PlayerColor.black;
         else
             this.playerTurn = PlayerColor.white;
         this.turn++;
+    }
+
+    [Server]
+    private void UpdatePossibleMoves()
+    {
+        this.possibleMoves.Clear();
+        foreach (var (position, gamePieceID) in this.gamePieces)
+        {
+            IPieceType pieceType = this.pieceTypes.GetPieceTypeForByID(gamePieceID.typeID);
+            List<Move> possibleMovesFromPosition = pieceType.GetPossibleMovesFrom(this, position);
+            //TODO: filter out moves that would put you in check mate
+            this.possibleMoves.Add(position, possibleMovesFromPosition);
+        }
     }
     #endregion
 
@@ -100,24 +124,23 @@ public class GameState : NetworkBehaviour
             return false;
     }
 
-    internal bool IsValidMove(BoardPosition startPosition, BoardPosition endPosition)
+    internal bool IsValidMove(Move move)
     {
-        //todo : validate move
-        if (startPosition.Equals(endPosition))
+        if (move.from.Equals(move.to))
         {
             Debug.Log("Invalid move : start == end");
             return false;
         }
 
-        if(!possibleMoves.ContainsKey(startPosition))
+        if(!possibleMoves.ContainsKey(move.from))
         {
             Debug.Log("Invalid move : start position is not set as possible move");
             return false;
         }
 
-        if (!possibleMoves[startPosition].Contains(endPosition))
+        if (!possibleMoves[move.from].Contains(move))
         {
-            Debug.Log("Invalid move : end position is not set as possible move from start");
+            Debug.Log("Invalid move : move is not set as possible move from start");
             return false;
         }
         return true;
@@ -133,27 +156,15 @@ public class GameState : NetworkBehaviour
         return gamePieces[fromPosition];
     }
 
-    internal List<BoardPosition> GetPossibleMovesFrom(BoardPosition boardPosition)
+    internal List<Move> GetPossibleMovesFrom(BoardPosition boardPosition)
     {
 
         if (!this.possibleMoves.ContainsKey(boardPosition))
         {
             Debug.Log("No possible moves set for given position.");
-            return new List<BoardPosition>();
+            return new List<Move>();
         }
         return this.possibleMoves[boardPosition];
-    }
-
-    public void UpdatePossibleMoves()
-    {
-        this.possibleMoves.Clear();
-        foreach(var (position, gamePieceID) in this.gamePieces)
-        {
-            IPieceType pieceType = this.pieceTypes.GetPieceTypeForByID(gamePieceID.typeID);
-            List<BoardPosition> possibleMovesFromPosition = pieceType.GetPossibleMovesFrom(this, position);
-            //TODO: filter out moves that would put you in check mate
-            this.possibleMoves.Add(position, possibleMovesFromPosition);
-        }
     }
 
     public bool HasPawnMoved(GamePieceID pawnID)
@@ -166,33 +177,4 @@ public class GameState : NetworkBehaviour
         return this.pawnHasMoved[pawnID];
     }
     #endregion
-}
-
-public readonly struct GamePieceID
-{
-    public readonly PlayerColor color;
-    public readonly PieceTypeID typeID;
-    public readonly int index;
-
-    public GamePieceID(PlayerColor ownerColor, PieceTypeID typeID, int index)
-    {
-        this.color = ownerColor;
-        this.typeID = typeID;
-        this.index = index;
-    }
-
-    public override string ToString()
-    {
-        return string.Format("{0} {1} ({2})", color, typeID, index);
-    }
-}
-
-public enum PlayerColor
-{
-    white, black
-}
-
-public enum PieceTypeID
-{
-    rook, knight, bishop, king, queen, pawn, none
 }
