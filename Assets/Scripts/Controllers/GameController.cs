@@ -15,6 +15,9 @@ public class GameController : NetworkBehaviour
 
     [SerializeField]
     private GameState gameState;
+
+    [SerializeField]
+    private AudioClip moveSound;
     #endregion
 
     #region Server only vars
@@ -102,7 +105,7 @@ public class GameController : NetworkBehaviour
             //Update game state
             this.gameState.MovePiece(move);
             //Perform clientside ui updates
-            this.RpcUpdateBoardViewForMove(move);            
+            this.RpcPostMoveClientUpdates(move, this.gameState.PlayerTurn);            
         }
         else
         {
@@ -113,15 +116,11 @@ public class GameController : NetworkBehaviour
 
     #region Rpcs
     [ClientRpc]
-    private void RpcUpdateBoardViewForMove(Move move)
+    private void RpcPostMoveClientUpdates(Move move, PlayerColor nextTurnPlayer)
     {
-        if (move.eats)
-        {
-            this.boardView.DestroyPieceSprite(move.eatPosition);
-            this.boardView.RemovePieceAtPosition(move.eatPosition);
-        }
-        this.boardView.MovePieceSpriteToBoardPosition(move.from, move.to);
-        this.boardView.UpdatePiecePosition(move.from, move.to);
+        this.boardView.PostMoveUpdates(move);
+        AudioManager.Singleton.PlaySoundEffect(this.moveSound);
+        //this.ui.TurnPopup(nextTurnPlayer);
     }
 
     [ClientRpc]

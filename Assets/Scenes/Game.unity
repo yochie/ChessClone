@@ -4723,6 +4723,7 @@ MonoBehaviour:
   boardView: {fileID: 1109024003}
   boardInputHandler: {fileID: 1109024004}
   gameState: {fileID: 288464415}
+  moveSound: {fileID: 8300000, guid: 2b15861a4f350394f8918e1b76f91563, type: 3}
 --- !u!114 &1097578739
 MonoBehaviour:
   m_ObjectHideFlags: 0

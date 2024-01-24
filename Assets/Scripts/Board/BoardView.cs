@@ -44,7 +44,18 @@ public class BoardView : MonoBehaviour
     #endregion
 
     #region Client-side state setters
-    internal void UpdatePiecePosition(BoardPosition startPosition, BoardPosition endPosition)
+    public void PostMoveUpdates(Move move)
+    {
+        if (move.eats)
+        {
+            this.DestroyPieceSprite(move.eatPosition);
+            this.RemovePieceAtPosition(move.eatPosition);
+        }
+        this.MovePieceSpriteToBoardPosition(move.from, move.to);
+        this.UpdatePiecePosition(move.from, move.to);
+    }
+
+    private void UpdatePiecePosition(BoardPosition startPosition, BoardPosition endPosition)
     {
         BoardPiece toMove = this.pieces[startPosition];
         this.pieces.Remove(startPosition);
@@ -52,13 +63,14 @@ public class BoardView : MonoBehaviour
         this.pieces[endPosition] = toMove;
     }
 
-    internal void RemovePieceAtPosition(BoardPosition positionToRemove)
+    private void RemovePieceAtPosition(BoardPosition positionToRemove)
     {
         this.pieces.Remove(positionToRemove);
     }
     #endregion
 
     #region Visual modifications
+
     public void HighligthTiles(List<BoardPosition> positions, Color color){
         foreach(BoardPosition position in positions)
         {
@@ -95,7 +107,7 @@ public class BoardView : MonoBehaviour
         this.pieces[spriteStoredAtPosition].transform.position = worldPositionEnd;
     }
 
-    internal void DestroyPieceSprite(BoardPosition eatPosition)
+    private void DestroyPieceSprite(BoardPosition eatPosition)
     {
         if(!this.pieces.ContainsKey(eatPosition))
             return;
