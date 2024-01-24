@@ -131,8 +131,12 @@ public class GameController : NetworkBehaviour
 
     [ClientRpc]
     private void RpcPlayerAssignColor(PlayerController player, PlayerColor color)
-    {
+    {        
         player.AssignColor(color);
+        if(player.isLocalPlayer)
+        {
+            this.ui.TriggerTurnPopup(color == PlayerColor.white);
+        }
     }
     #endregion
 
