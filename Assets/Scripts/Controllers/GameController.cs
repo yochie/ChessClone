@@ -17,6 +17,9 @@ public class GameController : NetworkBehaviour
     private GameState gameState;
 
     [SerializeField]
+    private MainUI ui;
+
+    [SerializeField]
     private AudioClip moveSound;
     #endregion
 
@@ -105,7 +108,10 @@ public class GameController : NetworkBehaviour
             //Update game state
             this.gameState.MovePiece(move);
             //Perform clientside ui updates
-            this.RpcPostMoveClientUpdates(move, this.gameState.PlayerTurn);            
+            foreach(PlayerController player in this.players)
+            {
+                this.TargetRpcPostMoveClientUpdates(player.connectionToClient, move, this.gameState.PlayerTurn == player.PlayerColor);
+            }            
         }
         else
         {
@@ -115,12 +121,12 @@ public class GameController : NetworkBehaviour
     #endregion
 
     #region Rpcs
-    [ClientRpc]
-    private void RpcPostMoveClientUpdates(Move move, PlayerColor nextTurnPlayer)
+    [TargetRpc]
+    private void TargetRpcPostMoveClientUpdates(NetworkConnectionToClient target, Move move, bool yourTurn)
     {
         this.boardView.PostMoveUpdates(move);
         AudioManager.Singleton.PlaySoundEffect(this.moveSound);
-        //this.ui.TurnPopup(nextTurnPlayer);
+        this.ui.TriggerTurnPopup(yourTurn);
     }
 
     [ClientRpc]
