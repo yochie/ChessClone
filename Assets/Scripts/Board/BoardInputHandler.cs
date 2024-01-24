@@ -11,7 +11,7 @@ public class BoardInputHandler : NetworkBehaviour
     private BoardView boardView;
 
     [SerializeField]
-    private GameState gameState;
+    private SyncedGameState gameState;
 
     public bool InputAllowed { get; set; }
 

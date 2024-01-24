@@ -14,7 +14,7 @@ public class GameController : NetworkBehaviour
     private BoardInputHandler boardInputHandler;
 
     [SerializeField]
-    private GameState gameState;
+    private SyncedGameState gameState;
 
     [SerializeField]
     private MainUI ui;

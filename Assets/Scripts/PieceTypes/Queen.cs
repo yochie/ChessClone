@@ -8,7 +8,7 @@ public class Queen : ScriptableObject, IPieceType
     [field: SerializeField]
     public PieceTypeID ForPieceTypeID { get; set; }
 
-    public List<Move> GetPossibleMovesFrom(GameState gameState, BoardPosition fromPosition)
+    public List<Move> GetPossibleMovesFrom(SyncedGameState gameState, BoardPosition fromPosition)
     {
         PlayerColor moverColor = gameState.GetPieceAtPosition(fromPosition).color;
         List<Move> possibleMoves = new();
