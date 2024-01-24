@@ -12,14 +12,22 @@ public class GameState
 
     private PlayerColor playerTurn;
 
+    private Dictionary<BoardPosition, List<Move>> possibleMoves;
 
-    private readonly Dictionary<BoardPosition, List<Move>> possibleMoves;
+    private Dictionary<PlayerColor, bool> playerChecked;
 
-    private readonly Dictionary<PlayerColor, bool> playerChecked;
-
-    public GameState(SyncedGameState syncedGameState)
+    public GameState(PieceTypeData pieceTypes,
+                     Dictionary<BoardPosition, GamePieceID> gamePieces,
+                     Dictionary<GamePieceID, bool> pawnHasMoved,
+                     PlayerColor playerTurn,
+                     Dictionary<BoardPosition, List<Move>> possibleMoves,
+                     Dictionary<PlayerColor, bool> playerChecked)
     {
-
+        this.pieceTypes = pieceTypes;
+        this.gamePieces = gamePieces;
+        this.pawnHasMoved = pawnHasMoved;
+        this.playerTurn = playerTurn;
+        this.possibleMoves = possibleMoves;
+        this.playerChecked = playerChecked;
     }
-
 }
