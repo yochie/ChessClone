@@ -22,6 +22,9 @@ public class TurnPopup : MonoBehaviour
     float stillDurationSeconds;
 
     [SerializeField]
+    Transform startPosition;
+
+    [SerializeField]
     Transform endPosition;
 
     [SerializeField]
@@ -29,6 +32,7 @@ public class TurnPopup : MonoBehaviour
 
     public void TriggerPopup(bool yourTurn)
     {
+        this.StopAllCoroutines();
         if(yourTurn)
             StartCoroutine(this.PopupCoroutine("Your turn", Color.green));
         else
@@ -37,15 +41,15 @@ public class TurnPopup : MonoBehaviour
 
     public IEnumerator PopupCoroutine(string labelText, Color labelColor)
     {
-        this.background.SetActive(true);
+        //this.background.SetActive(true);
         this.popup.SetActive(true);
         this.label.text = labelText;
         this.label.color = labelColor;
         float elapsedSeconds = 0f;
         Vector3 screenCenterPosition = Vector3.zero;
-        Vector3 startPosition = this.popup.transform.localPosition;
+        this.popup.transform.localPosition = this.startPosition.localPosition;
 
-        if(this.wooshSound != null)
+        if (this.wooshSound != null)
             AudioManager.Singleton.PlaySoundEffect(this.wooshSound);
         while (elapsedSeconds < slideDurationSeconds)
         {
@@ -66,8 +70,8 @@ public class TurnPopup : MonoBehaviour
             yield return null;
         }
 
-        this.background.SetActive(false);
-        this.popup.transform.localPosition = startPosition;
+        //this.background.SetActive(false);
+        this.popup.transform.localPosition = this.startPosition.position;
         this.popup.SetActive(false);
     }
 }
