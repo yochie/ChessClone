@@ -135,7 +135,7 @@ public class GameController : NetworkBehaviour
         player.AssignColor(color);
         if(player.isLocalPlayer)
         {
-            this.ui.TriggerTurnPopup(color == PlayerColor.white);
+            this.ui.SetupBoardForPlayer(player);
         }
     }
     #endregion

@@ -29,6 +29,14 @@ public class BoardView : MonoBehaviour
         }
     }
 
+    internal void Rotate()
+    {
+        foreach(BoardTile tile in this.tiles.Values)
+        {
+            tile.transform.Rotate(new Vector3(0, 0, 180));
+        }
+    }
+
     #region Client-side state getters
 
     //used to setup initial game state from scene setup on host
