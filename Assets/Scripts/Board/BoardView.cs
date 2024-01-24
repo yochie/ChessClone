@@ -45,14 +45,28 @@ public class BoardView : MonoBehaviour
         Dictionary<BoardPosition, GamePieceID> gamePieces = new();
         foreach (var (position, piece) in this.pieces)
         {
-            gamePieces[position] = new GamePieceID(piece.GetOwnerID(), piece.GetPieceTypeID(), piece.GetIndex());
+            gamePieces[position] = new GamePieceID(piece.GetOwnerColor(), piece.GetPieceTypeID(), piece.GetIndex());
         }
         return gamePieces;
+    }
+
+    private BoardPiece GetKing(PlayerColor color)
+    {
+        foreach (BoardPiece boardPiece in this.pieces.Values)
+        {
+            if (boardPiece.GetPieceTypeID() == PieceTypeID.king && boardPiece.GetOwnerColor() == color)
+            {
+                return boardPiece;
+            }
+        }
+
+        Debug.Log("Couldn't find king board piece");
+        return null;
     }
     #endregion
 
     #region Client-side state setters
-    public void PostMoveUpdates(Move move)
+    public void PostMoveUpdates(Move move, List<PlayerColor> checkedPlayers)
     {
         if (move.eats)
         {
@@ -61,8 +75,16 @@ public class BoardView : MonoBehaviour
         }
         this.MovePieceSpriteToBoardPosition(move.from, move.to);
         this.UpdatePiecePosition(move.from, move.to);
-    }
 
+        if (checkedPlayers.Count > 0)
+        {
+            //since any move can only check one opponent, just take first one
+            this.SetChecked(checkedPlayers[0]);
+        } else
+        {
+            this.ClearChecked();
+        }
+    }
     private void UpdatePiecePosition(BoardPosition startPosition, BoardPosition endPosition)
     {
         BoardPiece toMove = this.pieces[startPosition];
@@ -122,6 +144,22 @@ public class BoardView : MonoBehaviour
 
         Destroy(this.pieces[eatPosition].gameObject);
 
+    }
+
+    private void SetChecked(PlayerColor checkedPlayer)
+    {
+        BoardPiece kingPiece = this.GetKing(checkedPlayer);
+        kingPiece.SetChecked(isChecked: true);
+    }
+
+    private void ClearChecked()
+    {
+        List<PlayerColor> colors = new() { PlayerColor.white, PlayerColor.black };
+        foreach(PlayerColor color in colors)
+        {
+            BoardPiece kingPiece = this.GetKing(color);
+            kingPiece.SetChecked(isChecked: false);
+        }
     }
     #endregion
 }

@@ -110,7 +110,10 @@ public class GameController : NetworkBehaviour
             //Perform clientside ui updates
             foreach(PlayerController player in this.players)
             {
-                this.TargetRpcPostMoveClientUpdates(player.connectionToClient, move, this.gameState.PlayerTurn == player.PlayerColor);
+                this.TargetRpcPostMoveClientUpdates(player.connectionToClient,
+                                                    move,
+                                                    this.gameState.PlayerTurn == player.PlayerColor,
+                                                    this.gameState.GetCheckedPlayers());
             }            
         }
         else
@@ -122,11 +125,11 @@ public class GameController : NetworkBehaviour
 
     #region Rpcs
     [TargetRpc]
-    private void TargetRpcPostMoveClientUpdates(NetworkConnectionToClient target, Move move, bool yourTurn)
+    private void TargetRpcPostMoveClientUpdates(NetworkConnectionToClient target, Move move, bool yourTurn, List<PlayerColor> checkedPlayers)
     {
-        this.boardView.PostMoveUpdates(move);
+        this.boardView.PostMoveUpdates(move, checkedPlayers);
         AudioManager.Singleton.PlaySoundEffect(this.moveSound);
-        this.ui.TriggerTurnPopup(yourTurn);
+        this.ui.TriggerTurnPopup(yourTurn, checkedPlayers.Count > 0);
     }
 
     [ClientRpc]

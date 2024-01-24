@@ -14,9 +14,9 @@ public class MainUI : MonoBehaviour
     [SerializeField]
     private Camera mainCamera;
 
-    public void TriggerTurnPopup(bool yourTurn)
+    public void TriggerTurnPopup(bool yourTurn, bool afterCheckingMove)
     {
-        this.turnPopup.TriggerPopup(yourTurn);
+        this.turnPopup.TriggerPopup(yourTurn, afterCheckingMove);
     }
 
     internal void SetupBoardForPlayer(PlayerController player)
@@ -28,6 +28,6 @@ public class MainUI : MonoBehaviour
             this.boardView.Rotate();         
         }
 
-        this.TriggerTurnPopup(youAreWhite);
+        this.TriggerTurnPopup(youAreWhite, afterCheckingMove: false);
     }
 }

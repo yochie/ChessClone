@@ -14,7 +14,13 @@ public class BoardPiece : MonoBehaviour
     [SerializeField]
     private int pieceIndex;
 
-    public PlayerColor GetOwnerID()
+    [SerializeField]
+    private Color checkedColor;
+
+    [SerializeField]
+    private SpriteRenderer sprite;
+
+    public PlayerColor GetOwnerColor()
     {
         return this.ownerColor;
     }
@@ -29,5 +35,10 @@ public class BoardPiece : MonoBehaviour
     {
 
         return this.pieceIndex;
+    }
+
+    internal void SetChecked(bool isChecked)
+    {
+        this.sprite.color = isChecked ? this.checkedColor : Color.white;
     }
 }

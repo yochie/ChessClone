@@ -30,20 +30,23 @@ public class TurnPopup : MonoBehaviour
     [SerializeField]
     AudioClip wooshSound;
 
-    public void TriggerPopup(bool yourTurn)
+    public void TriggerPopup(bool yourTurn, bool afterCheckingMove)
     {
         this.StopAllCoroutines();
         if(yourTurn)
-            StartCoroutine(this.PopupCoroutine("Your turn", Color.green));
+            StartCoroutine(this.PopupCoroutine("Your turn", Color.green, afterCheckingMove));
         else
-            StartCoroutine(this.PopupCoroutine("Opponent turn", Color.red));
+            StartCoroutine(this.PopupCoroutine("Opponent turn", Color.red, afterCheckingMove));
     }
 
-    public IEnumerator PopupCoroutine(string labelText, Color labelColor)
+    public IEnumerator PopupCoroutine(string labelText, Color labelColor, bool afterCheckingMove)
     {
         //this.background.SetActive(true);
         this.popup.SetActive(true);
-        this.label.text = labelText;
+        if (afterCheckingMove)
+            this.label.text = string.Format("{0}\n{1}", labelText, "Checked!");
+        else
+            this.label.text = labelText;
         this.label.color = labelColor;
         float elapsedSeconds = 0f;
         Vector3 screenCenterPosition = Vector3.zero;

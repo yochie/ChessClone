@@ -25,6 +25,9 @@ public class GameState : NetworkBehaviour
     public int Turn { get => this.turn; }
 
     private readonly SyncDictionary<BoardPosition, List<Move>> possibleMoves = new();
+
+    private readonly SyncDictionary<PlayerColor, bool> playerChecked = new();
+
     #endregion
 
     #region State modifiers
@@ -39,6 +42,8 @@ public class GameState : NetworkBehaviour
         }
         this.playerTurn = playerTurn;
         this.turn = 0;
+        this.playerChecked.Add(PlayerColor.white, false);
+        this.playerChecked.Add(PlayerColor.black, false);
         this.UpdatePossibleMoves();
     }
 
@@ -64,9 +69,15 @@ public class GameState : NetworkBehaviour
         if (toMove.typeID == PieceTypeID.pawn)
             this.pawnHasMoved[toMove] = true;
 
+        //just for computing checked state, will be changed again to set possible moves for new turn
+        this.UpdatePossibleMoves();
+
+        this.UpdateCheckedState();
+
         this.ChangeTurn();
 
         this.UpdatePossibleMoves();
+
     }
 
     [Server]
@@ -95,11 +106,50 @@ public class GameState : NetworkBehaviour
         this.possibleMoves.Clear();
         foreach (var (position, gamePieceID) in this.gamePieces)
         {
+            if (gamePieceID.color != this.playerTurn)
+                continue;
             IPieceType pieceType = this.pieceTypes.GetPieceTypeForByID(gamePieceID.typeID);
             List<Move> possibleMovesFromPosition = pieceType.GetPossibleMovesFrom(this, position);
-            //TODO: filter out moves that would put you in check mate
+            //TODO: filter out moves that would put you in check
             this.possibleMoves.Add(position, possibleMovesFromPosition);
         }
+    }
+
+    [Server]
+    private void UpdateCheckedState() {
+        List<PlayerColor> toCheck = new();
+        foreach(List<Move> moveList in this.possibleMoves.Values)
+        {
+            foreach (Move move in moveList)
+            {
+                if (!move.eats)
+                    continue;
+
+                if (!this.PositionHoldsAPiece(move.eatPosition))
+                {
+                    Debug.Log("ERROR: Possible move eats peace at position where nothing is stored...");
+                    continue;
+                }
+
+                GamePieceID eatenPiece = this.GetPieceAtPosition(move.eatPosition);
+                if (eatenPiece.typeID == PieceTypeID.king)
+                {
+                    toCheck.Add(eatenPiece.color);
+                }
+            }
+        }
+
+        foreach(PlayerColor color in this.playerChecked.Keys.ToList())
+        {
+            this.playerChecked[color] = toCheck.Contains(color);
+        }
+        
+        //TODO : remove any move that doesnt clear cheked from possible moves
+    }
+
+    internal List<PlayerColor> GetCheckedPlayers()
+    {
+        return this.playerChecked.Where(pair => pair.Value).Select(pair => pair.Key).ToList();
     }
     #endregion
 
@@ -175,6 +225,11 @@ public class GameState : NetworkBehaviour
             return false;
         }
         return this.pawnHasMoved[pawnID];
+    }
+
+    public bool IsPlayerChecked(PlayerColor playerColor)
+    {
+        return this.playerChecked[playerColor];
     }
     #endregion
 }
