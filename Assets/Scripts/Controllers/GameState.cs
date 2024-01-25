@@ -148,7 +148,7 @@ public class GameState : IGamePieceState
     private void UpdatePossibleMoves(PieceTypeData pieceTypeData)
     {
         this.possibleMoves.Clear();
-        Dictionary<BoardPosition, List<Move>> toMakePossible = new();
+        Dictionary<BoardPosition, List<Move>> potentialMoves = new();
         foreach (var (position, gamePieceID) in this.gamePieces)
         {
             if (gamePieceID.color != this.playerTurn)
@@ -156,24 +156,39 @@ public class GameState : IGamePieceState
             IPieceType pieceType = pieceTypeData.GetPieceTypeByID(gamePieceID.typeID);
             List<Move> possibleMovesFromPosition = pieceType.GetPossibleMovesFrom(this, position);
 
-            toMakePossible.Add(position, possibleMovesFromPosition);
+            potentialMoves.Add(position, possibleMovesFromPosition);
         }
 
 
-        //TODO: Remove moves that leave checked
-        //if (this.playerChecked[this.playerTurn])
-        //{
-        //    foreach (var pair in toMakePossible)
-        //    {
+        //Remove any move that would result in check state for current player
+        if (this.playerCheckStates[this.playerTurn])
+        {
+            foreach (var (position, moveList) in potentialMoves.ToList())
+            {
+                foreach (Move move in moveList.ToList())
+                {
+                    GameState clonedState = this.Clone();
+                    clonedState.ApplyMoveToBoardState(move);
+                    bool selfChecked = GameState.OpponentCheckedAtGameState(pieceTypeData, Utility.GetOpponentColor(this.playerTurn), clonedState);
+                    if (selfChecked)
+                    {
+                        moveList.Remove(move);
+                    }
+                }
+            }
+        }
 
-        //    }
+        //TODO: Remove moves that leave you checked
+        //if (this.playerCheckStates[this.playerTurn])
+        //{
+            
         //}
 
         //TODO: Remove moves that would put you in check
 
 
         //Copy result to possible moves
-        foreach (var pair in toMakePossible)
+        foreach (var pair in potentialMoves)
         {
             this.possibleMoves[pair.Key] = pair.Value;
         }
@@ -182,17 +197,16 @@ public class GameState : IGamePieceState
     [Server]
     private void UpdateCheckState(PieceTypeData pieceTypeData)
     {
-        List<PlayerColor> checkedPlayers = GameState.GetCheckedPlayersForState(pieceTypeData, this.playerTurn, this);
-        foreach (PlayerColor playerColor in this.playerCheckStates.Keys.ToList())
-        {
-            this.playerCheckStates[playerColor] = checkedPlayers.Contains(playerColor);
-        }
+        bool opponentChecked = GameState.OpponentCheckedAtGameState(pieceTypeData, this.playerTurn, this);
+
+        this.playerCheckStates[Utility.GetOpponentColor(this.playerTurn)] = opponentChecked;
+
     }
 
     //Makes clone, calculates its possible moves assuming given player is playing
-    //marks opponent as checked if any possible move would eat opponents king
+    //return true if any possible move would eat opponents king
     [Server]
-    private static List<PlayerColor> GetCheckedPlayersForState(PieceTypeData pieceTypeData, PlayerColor assumePlayerTurn, GameState state)
+    private static bool OpponentCheckedAtGameState(PieceTypeData pieceTypeData, PlayerColor assumePlayerTurn, GameState state)
     {
         //Calculate possible moves on clone to avoid updating actual possible moves
         GameState clonedState = state.Clone();
@@ -216,11 +230,11 @@ public class GameState : IGamePieceState
                 GamePieceID eatenPiece = clonedState.GetPieceAtPosition(move.eatPosition);
                 if (eatenPiece.typeID == PieceTypeID.king && eatenPiece.color != clonedState.playerTurn)
                 {
-                    checkedPlayers.Add(eatenPiece.color);
+                    return true;
                 }
             }
         }
-        return checkedPlayers;
+        return false;
     }
 
     internal List<PlayerColor> GetCheckedPlayers()
