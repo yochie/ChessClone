@@ -9,10 +9,18 @@ public class MainUI : MonoBehaviour
     private TurnPopup turnPopup;
 
     [SerializeField]
+    private WaitingPopup waitingPopup;
+
+    [SerializeField]
     private BoardView boardView;
 
     [SerializeField]
     private Camera mainCamera;
+
+    public void DisplayWaitingMessage()
+    {
+        this.waitingPopup.Display();
+    }
 
     public void TriggerTurnPopup(bool yourTurn, bool afterCheckingMove)
     {
@@ -27,7 +35,16 @@ public class MainUI : MonoBehaviour
             this.mainCamera.transform.Rotate(new Vector3(0, 0, 180));
             this.boardView.Rotate();         
         }
+        StartCoroutine(this.GameStartAnimationsCoroutine(youAreWhite));
 
+    }
+
+    private IEnumerator GameStartAnimationsCoroutine(bool youAreWhite)
+    {
+        //fadeout is triggered even for remote client where popup is not displayed
+        //popup still takes care of blocking input until first turn popup is triggered
+        this.waitingPopup.FadeOut();
+        yield return new WaitForSeconds(this.waitingPopup.GetFadeOutDuration());
         this.TriggerTurnPopup(youAreWhite, afterCheckingMove: false);
     }
 }

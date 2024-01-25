@@ -54,6 +54,13 @@ public class GameController : NetworkBehaviour
         GameController.Singleton = this;
     }
 
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        this.InitializeGameStateFromBoardView();
+        this.ui.DisplayWaitingMessage();
+    }
+
     //Called once 2 clients connected, their player objects started on clients and counted to server
     [Server]
     private void StartGame()
@@ -62,7 +69,7 @@ public class GameController : NetworkBehaviour
         int startingPlayerIndex = UnityEngine.Random.Range(0,2);
         int index = 0;
 
-        foreach(PlayerController player in this.players)
+        foreach (PlayerController player in this.players)
         {
             if (index == startingPlayerIndex)
                 this.RpcPlayerAssignColor(player, PlayerColor.white);
@@ -70,9 +77,6 @@ public class GameController : NetworkBehaviour
                 this.RpcPlayerAssignColor(player, PlayerColor.black);
             index++;
         }
-
-        this.InitializeGameStateFromBoardView();
-
         this.boardInputHandler.RpcSetInputAllowed();
     }
 

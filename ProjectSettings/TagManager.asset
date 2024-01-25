@@ -50,3 +50,6 @@ TagManager:
   - name: Pieces
     uniqueID: 204246203
     locked: 0
+  - name: Overlay
+    uniqueID: 3621563729
+    locked: 0
