@@ -8,7 +8,7 @@ public class Knight : ScriptableObject, IPieceType
     [field: SerializeField]
     public PieceTypeID ForPieceTypeID { get; set; }
 
-    public List<Move> GetPossibleMovesFrom(SyncedGameState gameState, BoardPosition fromPosition)
+    public List<Move> GetPossibleMovesFrom(GameState gameState, BoardPosition fromPosition)
     {
         PlayerColor moverColor = gameState.GetPieceAtPosition(fromPosition).color;
         List<Move> possibleMoves = new();
@@ -28,7 +28,7 @@ public class Knight : ScriptableObject, IPieceType
             if (!pos.IsOnBoard())
                 continue;
 
-            if (gameState.PositionHoldsAPiece(pos))
+            if (gameState.GetGamePiecesClone().ContainsKey(pos))
             {
                 //can eat that piece
                 if (!gameState.IsOwnerOfPieceAtPosition(pos, moverColor))

@@ -11,7 +11,7 @@ public class BoardInputHandler : NetworkBehaviour
     private BoardView boardView;
 
     [SerializeField]
-    private SyncedGameState gameState;
+    private SyncedGameState syncedGameState;
 
     public bool InputAllowed { get; set; }
 
@@ -29,14 +29,14 @@ public class BoardInputHandler : NetworkBehaviour
     {
         BoardPosition tilePosition = tile.GetBoardPosition();
         if (this.InputAllowed && 
-            this.gameState.PlayerTurn == GameController.Singleton.LocalPlayer.PlayerColor &&
-            this.gameState.PositionHoldsAPiece(tilePosition) &&            
-            this.gameState.IsOwnerOfPieceAtPosition(tilePosition, GameController.Singleton.LocalPlayer.PlayerColor))
+            this.syncedGameState.PlayerTurn == GameController.Singleton.LocalPlayer.PlayerColor &&
+            this.syncedGameState.PositionHoldsAPiece(tilePosition) &&            
+            this.syncedGameState.IsOwnerOfPieceAtPosition(tilePosition, GameController.Singleton.LocalPlayer.PlayerColor))
         {
             //highlight start position
             this.boardView.HighligthTiles(new List<BoardPosition>() { tilePosition }, Color.blue);
             //highlight possible moves           
-            List<Move> possibleMoves = this.gameState.GetPossibleMovesFrom(tilePosition);
+            List<Move> possibleMoves = this.syncedGameState.GetPossibleMovesFrom(tilePosition);
             this.boardView.HighligthTiles(possibleMoves.Select(move => move.to).ToList(), Color.green);
 
             this.draggingBoardPiece = true;
@@ -65,7 +65,7 @@ public class BoardInputHandler : NetworkBehaviour
         }
         BoardPosition endPosition = this.HoveredTile.GetBoardPosition();
 
-        List<Move> possibleMoves = this.gameState.GetPossibleMovesFrom(startPosition);
+        List<Move> possibleMoves = this.syncedGameState.GetPossibleMovesFrom(startPosition);
         List<Move> movesToDestination = possibleMoves.Where(move => move.to.Equals(endPosition)).ToList();
         if(movesToDestination.Count == 0)
         {
@@ -76,18 +76,9 @@ public class BoardInputHandler : NetworkBehaviour
             Debug.Log("More than one move leads to dest, defaulting to first");
         }
         Move move = movesToDestination[0];
-        if (this.gameState.IsValidMove(move))
-        {
-            GameController.Singleton.CmdTryMove(move);
-            this.draggingBoardPiece = false;
-            return;
-        }
-        else
-        {
-            this.AbortDrag(startPosition);
-            return;
-        }
-        
+        GameController.Singleton.CmdTryMove(move);
+        this.draggingBoardPiece = false;
+        return;        
     }
 
     private void AbortDrag(BoardPosition returnTo)

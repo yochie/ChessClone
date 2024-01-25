@@ -9,7 +9,7 @@ public class PieceTypeData : ScriptableObject
     [SerializeField]
     private List<ScriptableObject> pieceTypes;
 
-    public IPieceType GetPieceTypeForByID(PieceTypeID typeID)
+    public IPieceType GetPieceTypeByID(PieceTypeID typeID)
     {
         return this.pieceTypes.Cast<IPieceType>().Single(pieceType => pieceType.ForPieceTypeID == typeID);
     }

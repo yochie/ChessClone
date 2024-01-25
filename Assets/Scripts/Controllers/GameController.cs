@@ -11,10 +11,15 @@ public class GameController : NetworkBehaviour
     private BoardView boardView;
 
     [SerializeField]
-    private BoardInputHandler boardInputHandler;
+    private BoardInputHandler boardInputHandler;    
+
+    //only holds state that is needed client side
+    //updated whenever server game state is modified
+    [SerializeField]
+    private SyncedGameState syncedGameState;
 
     [SerializeField]
-    private SyncedGameState gameState;
+    private PieceTypeData pieceTypeData;
 
     [SerializeField]
     private MainUI ui;
@@ -24,6 +29,7 @@ public class GameController : NetworkBehaviour
     #endregion
 
     #region Server only vars
+    private GameState serverGameState;
     private List<PlayerController> players = new();
     private int connectedClientsCount = 0;
     
@@ -48,14 +54,7 @@ public class GameController : NetworkBehaviour
         GameController.Singleton = this;
     }
 
-    [Server]
-    private void InitializeGameStateFromBoardView()
-    {
-        Dictionary<BoardPosition, GamePieceID> boardViewState = this.boardView.GetBoardViewState();
-        this.gameState.Init(boardViewState, PlayerColor.white);
-    }
-
-
+    //Called once 2 clients connected, their player objects started on clients and counted to server
     [Server]
     private void StartGame()
     {
@@ -77,6 +76,13 @@ public class GameController : NetworkBehaviour
         this.boardInputHandler.RpcSetInputAllowed();
     }
 
+    [Server]
+    private void InitializeGameStateFromBoardView()
+    {
+        Dictionary<BoardPosition, GamePieceID> boardViewState = this.boardView.GetBoardViewState();
+        this.serverGameState = new(PlayerColor.white, boardViewState, this.pieceTypeData);
+        this.syncedGameState.Init(this.serverGameState);
+    }
 
     [Server]
     internal void RegisterPlayerOnServer(PlayerController playerController)
@@ -102,23 +108,24 @@ public class GameController : NetworkBehaviour
     public void CmdTryMove(Move move)
     {
         //validate on server, even though it will have been done clientsice, just to be sure
-        if (this.gameState.IsValidMove(move))
+        if (this.serverGameState.IsPossibleMove(move))
         {
-            Debug.LogFormat("{0} moved from {1} to {2}", this.gameState.GetPieceAtPosition(move.from), move.from, move.to);
+            Debug.LogFormat("{0} moved from {1} to {2}", this.serverGameState.GetPieceAtPosition(move.from), move.from, move.to);
             //Update game state
-            this.gameState.MovePiece(move);
+            this.serverGameState.DoMove(move, this.pieceTypeData);
+            this.syncedGameState.UpdateState(this.serverGameState);
             //Perform clientside ui updates
             foreach(PlayerController player in this.players)
             {
                 this.TargetRpcPostMoveClientUpdates(player.connectionToClient,
                                                     move,
-                                                    this.gameState.PlayerTurn == player.PlayerColor,
-                                                    this.gameState.GetCheckedPlayers());
+                                                    this.serverGameState.PlayerTurn == player.PlayerColor,
+                                                    this.serverGameState.GetCheckedPlayers());
             }            
         }
         else
         {
-            Debug.LogFormat("Failed to move {0} from {1} to {2}", this.gameState.GetPieceAtPosition(move.from), move.from, move.to);
+            Debug.LogFormat("Failed to move {0} from {1} to {2}", this.serverGameState.GetPieceAtPosition(move.from), move.from, move.to);
         }
     }
     #endregion
