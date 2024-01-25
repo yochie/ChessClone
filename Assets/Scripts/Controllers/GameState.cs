@@ -159,8 +159,6 @@ public class GameState : IGamePieceState
             potentialMoves.Add(position, possibleMovesFromPosition);
         }
 
-
-        //TODO : fix loop
         //Remove any move that would result in check state for current player
         if (this.playerCheckStates[this.playerTurn])
         {
@@ -170,7 +168,7 @@ public class GameState : IGamePieceState
                 {
                     GameState clonedState = this.Clone();
                     clonedState.ApplyMoveToBoardState(move);
-                    bool selfChecked = GameState.OpponentCheckedAtGameState(pieceTypeData, Utility.GetOpponentColor(this.playerTurn), clonedState);
+                    bool selfChecked = GameState.KingThreatenedAtGameState(pieceTypeData, Utility.GetOpponentColor(this.playerTurn), clonedState);
                     if (selfChecked)
                     {
                         moveList.Remove(move);
@@ -178,15 +176,6 @@ public class GameState : IGamePieceState
                 }
             }
         }
-
-        //TODO: Remove moves that leave you checked
-        //if (this.playerCheckStates[this.playerTurn])
-        //{
-            
-        //}
-
-        //TODO: Remove moves that would put you in check
-
 
         //Copy result to possible moves
         foreach (var pair in potentialMoves)
@@ -198,20 +187,26 @@ public class GameState : IGamePieceState
     [Server]
     private void UpdateCheckState(PieceTypeData pieceTypeData)
     {
-        bool opponentChecked = GameState.OpponentCheckedAtGameState(pieceTypeData, this.playerTurn, this);
-
+        bool opponentChecked = GameState.KingThreatenedAtGameState(pieceTypeData, this.playerTurn, this);
         this.playerCheckStates[Utility.GetOpponentColor(this.playerTurn)] = opponentChecked;
+
+        //this should be false during normal operation since self checking moves are illegal
+        bool selfChecked = GameState.KingThreatenedAtGameState(pieceTypeData, Utility.GetOpponentColor(this.playerTurn), this);
+        this.playerCheckStates[this.playerTurn] = selfChecked;
+
+        //since any self checking move is invalid, we can safely clear our checked flag
+        //this.playerCheckStates[this.playerTurn] = false;
 
     }
 
     //Makes clone, calculates its possible moves assuming given player is playing
     //return true if any possible move would eat opponents king
     [Server]
-    private static bool OpponentCheckedAtGameState(PieceTypeData pieceTypeData, PlayerColor assumePlayerTurn, GameState state)
+    private static bool KingThreatenedAtGameState(PieceTypeData pieceTypeData, PlayerColor threatPlayer, GameState state)
     {
         //Calculate possible moves on clone to avoid updating actual possible moves
         GameState clonedState = state.Clone();
-        clonedState.SetPlayerTurn(assumePlayerTurn);
+        clonedState.SetPlayerTurn(threatPlayer);
         clonedState.UpdatePossibleMoves(pieceTypeData);
 
         List<PlayerColor> checkedPlayers = new();
