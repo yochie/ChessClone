@@ -145,7 +145,7 @@ public class GameState : IGamePieceState
     }
 
     [Server]
-    private void UpdatePossibleMoves(PieceTypeData pieceTypeData)
+    private void UpdatePossibleMoves(PieceTypeData pieceTypeData, bool allowSelfChecking = false)
     {
         this.possibleMoves.Clear();
         Dictionary<BoardPosition, List<Move>> potentialMoves = new();
@@ -160,7 +160,9 @@ public class GameState : IGamePieceState
         }
 
         //Remove any move that would result in check state for current player
-        if (this.playerCheckStates[this.playerTurn])
+        //only exception is for when simulating states to determine whether a move would cause self check
+        //in that case, consider self checking moves legal by opponent
+        if (!allowSelfChecking)
         {
             foreach (var (position, moveList) in potentialMoves.ToList())
             {
@@ -207,7 +209,8 @@ public class GameState : IGamePieceState
         //Calculate possible moves on clone to avoid updating actual possible moves
         GameState clonedState = state.Clone();
         clonedState.SetPlayerTurn(threatPlayer);
-        clonedState.UpdatePossibleMoves(pieceTypeData);
+        //since players are still checked event if the threatening move would cause self check, we allow self checking when considering possible moves
+        clonedState.UpdatePossibleMoves(pieceTypeData, allowSelfChecking: true);
 
         List<PlayerColor> checkedPlayers = new();
         foreach (List<Move> moveList in clonedState.possibleMoves.Values.ToList())
