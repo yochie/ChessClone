@@ -160,6 +160,7 @@ public class GameState : IGamePieceState
         }
 
 
+        //TODO : fix loop
         //Remove any move that would result in check state for current player
         if (this.playerCheckStates[this.playerTurn])
         {
