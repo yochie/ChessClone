@@ -43,7 +43,10 @@ public class BoardTile : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
     public void OnDrag(PointerEventData eventData)
     {
-        this.inputHandler.OnTileDrag(this, eventData.pointerCurrentRaycast.worldPosition);
+        //Not sure why, but raycast was return 0 when not hovering a canvas, using raw position and setting z to 0 instead
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y, 0));
+        worldPosition.z = 0;
+        this.inputHandler.OnTileDrag(this, worldPosition);
     }
 
     public void OnEndDrag(PointerEventData eventData)
