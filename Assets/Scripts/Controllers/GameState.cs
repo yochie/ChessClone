@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using System.Linq;
+using System;
 
 public class GameState : IGamePieceState
 {
@@ -16,6 +17,9 @@ public class GameState : IGamePieceState
     private Dictionary<GamePieceID, bool> pawnHasMoved;
 
     private Dictionary<PlayerColor, bool> playerCheckStates;
+
+    private Dictionary<PlayerColor, bool> playerCheckMateStates;
+    private bool draw;
 
     //Fresh copy constructor, used for initial setup
     public GameState(PlayerColor playerTurn, Dictionary<BoardPosition, GamePieceID> gamePieces, PieceTypeData pieceTypeData)
@@ -33,6 +37,10 @@ public class GameState : IGamePieceState
         this.playerCheckStates = new();
         this.playerCheckStates.Add(PlayerColor.white, false);
         this.playerCheckStates.Add(PlayerColor.black, false);
+        this.playerCheckMateStates = new();
+        this.playerCheckMateStates.Add(PlayerColor.white, false);
+        this.playerCheckMateStates.Add(PlayerColor.black, false);
+        this.draw = false;
         this.possibleMoves = new();
         this.UpdatePossibleMoves(pieceTypeData);
     }
@@ -42,13 +50,17 @@ public class GameState : IGamePieceState
                      Dictionary<BoardPosition, GamePieceID> gamePieces,
                      Dictionary<BoardPosition, List<Move>> possibleMoves,
                      Dictionary<GamePieceID, bool> pawnHasMoved,                                          
-                     Dictionary<PlayerColor, bool> playerChecked)
+                     Dictionary<PlayerColor, bool> playerChecked,
+                     Dictionary<PlayerColor, bool> playerCheckMated,
+                     bool draw)
     {
         this.playerTurn = playerTurn;
         this.gamePieces = gamePieces;
         this.possibleMoves = possibleMoves;
         this.pawnHasMoved = pawnHasMoved;
         this.playerCheckStates = playerChecked;
+        this.playerCheckMateStates = playerCheckMated;
+        this.draw = draw;
     }
 
     #region Clone
@@ -59,7 +71,9 @@ public class GameState : IGamePieceState
         //dont have their own function since they are kept private
         Dictionary<GamePieceID, bool> pawnHasMovedClone = new(this.pawnHasMoved);
         Dictionary<PlayerColor, bool> playerCheckedClone = new(this.playerCheckStates);
-        return new GameState(this.playerTurn, this.GetGamePiecesClone(), this.GetPossibleMovesClone(), pawnHasMovedClone, playerCheckedClone);
+        Dictionary<PlayerColor, bool> playerCheckMatedClone = new(this.playerCheckMateStates);
+
+        return new GameState(this.playerTurn, this.GetGamePiecesClone(), this.GetPossibleMovesClone(), pawnHasMovedClone, playerCheckedClone, playerCheckMatedClone, this.draw);
     }
 
     public Dictionary<BoardPosition, GamePieceID> GetGamePiecesClone() 
@@ -92,6 +106,20 @@ public class GameState : IGamePieceState
         this.SwapTurn();
 
         this.UpdatePossibleMoves(pieceTypeData);
+
+        this.UpdateGameEndStates(pieceTypeData);
+    }
+
+    private void UpdateGameEndStates(PieceTypeData pieceTypeData)
+    {
+        bool noPossibleMoves = !this.AnyPossibleMove();
+        if (noPossibleMoves && this.GetCheckedPlayers().Contains(this.playerTurn))
+        {
+            this.playerCheckMateStates[this.playerTurn] = true;
+        } else if (noPossibleMoves)
+        {
+            this.draw = true;
+        }
     }
 
     [Server]
@@ -196,11 +224,11 @@ public class GameState : IGamePieceState
         bool selfChecked = GameState.KingThreatenedAtGameState(pieceTypeData, Utility.GetOpponentColor(this.playerTurn), this);
         this.playerCheckStates[this.playerTurn] = selfChecked;
 
-        //since any self checking move is invalid, we can safely clear our checked flag
-        //this.playerCheckStates[this.playerTurn] = false;
-
     }
 
+    #endregion
+
+    #region Utility
     //Makes clone, calculates its possible moves assuming given player is playing
     //return true if any possible move would eat opponents king
     [Server]
@@ -240,9 +268,16 @@ public class GameState : IGamePieceState
     {
         return this.playerCheckStates.Where(pair => pair.Value).Select(pair => pair.Key).ToList();
     }
-    #endregion
 
-    #region Utility
+    internal List<PlayerColor> GetCheckMatedPlayers()
+    {
+        return this.playerCheckMateStates.Where(pair => pair.Value).Select(pair => pair.Key).ToList();
+    }
+
+    public bool GetDraw()
+    {
+        return this.draw;
+    }
 
     internal bool IsPossibleMove(Move move)
     {
@@ -312,6 +347,16 @@ public class GameState : IGamePieceState
             return new List<Move>();
         }
         return this.possibleMoves[boardPosition];
+    }
+
+    public bool AnyPossibleMove()
+    {
+        foreach(List<Move> moveList in this.possibleMoves.Values)
+        {
+            if (moveList.Count > 0)
+                return true;
+        }
+        return false;
     }
     #endregion
 }

@@ -118,13 +118,23 @@ public class GameController : NetworkBehaviour
             //Update game state
             this.serverGameState.DoMove(move, this.pieceTypeData);
             this.syncedGameState.UpdateState(this.serverGameState);
+            List<PlayerColor> checkMatedPlayers = this.serverGameState.GetCheckMatedPlayers();
+            bool gameDrawn = this.serverGameState.GetDraw();
+            bool gameEnded = checkMatedPlayers.Count > 0 || gameDrawn;
+            if (gameEnded)
+            {
+                Debug.Log("game ended");
+            }
             //Perform clientside ui updates
             foreach(PlayerController player in this.players)
             {
+
                 this.TargetRpcPostMoveClientUpdates(player.connectionToClient,
                                                     move,
                                                     this.serverGameState.PlayerTurn == player.PlayerColor,
-                                                    this.serverGameState.GetCheckedPlayers());
+                                                    this.serverGameState.GetCheckedPlayers(),
+                                                    gameEnded,
+                                                    checkMatedPlayers);
             }            
         }
         else
@@ -136,11 +146,14 @@ public class GameController : NetworkBehaviour
 
     #region Rpcs
     [TargetRpc]
-    private void TargetRpcPostMoveClientUpdates(NetworkConnectionToClient target, Move move, bool yourTurn, List<PlayerColor> checkedPlayers)
+    private void TargetRpcPostMoveClientUpdates(NetworkConnectionToClient target, Move move, bool yourTurn, List<PlayerColor> checkedPlayers, bool gameEnded, List<PlayerColor> checkMatedPlayers)
     {
         this.boardView.PostMoveUpdates(move, checkedPlayers);
         AudioManager.Singleton.PlaySoundEffect(this.moveSound);
-        this.ui.TriggerTurnPopup(yourTurn, checkedPlayers.Count > 0);
+        if (!gameEnded)
+            this.ui.TriggerTurnPopup(yourTurn, checkedPlayers.Count > 0);
+        else
+            this.ui.TriggerEndGamePopup(checkMatedPlayers);
     }
 
     [ClientRpc]

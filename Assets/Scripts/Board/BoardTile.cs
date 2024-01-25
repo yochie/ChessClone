@@ -39,7 +39,6 @@ public class BoardTile : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     public void OnBeginDrag(PointerEventData eventData)
     {
         this.inputHandler.OnTileBeginDrag(this);
-        Debug.Log("Begin drag");
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -54,7 +53,6 @@ public class BoardTile : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
     public void OnMouseEnter()
     {
-        Debug.Log("Mouse enter");
         this.inputHandler.HoveredTile = this;
     }
 

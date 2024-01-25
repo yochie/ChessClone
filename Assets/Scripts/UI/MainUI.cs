@@ -12,6 +12,9 @@ public class MainUI : MonoBehaviour
     private WaitingPopup waitingPopup;
 
     [SerializeField]
+    private EndGamePopup endGamePopup;
+
+    [SerializeField]
     private BoardView boardView;
 
     [SerializeField]
@@ -25,6 +28,15 @@ public class MainUI : MonoBehaviour
     public void TriggerTurnPopup(bool yourTurn, bool afterCheckingMove)
     {
         this.turnPopup.TriggerPopup(yourTurn, afterCheckingMove);
+    }
+    internal void TriggerEndGamePopup(List<PlayerColor> checkMatedPlayers)
+    {
+        this.endGamePopup.gameObject.SetActive(true);
+        if(checkMatedPlayers.Count != 1)
+            this.endGamePopup.TriggerPopup(draw: true);
+        else
+            this.endGamePopup.TriggerPopup(draw: false, winner: Utility.GetOpponentColor(checkMatedPlayers[0]));
+
     }
 
     internal void SetupBoardForPlayer(PlayerController player)
@@ -47,4 +59,6 @@ public class MainUI : MonoBehaviour
         yield return new WaitForSeconds(this.waitingPopup.GetFadeOutDuration());
         this.TriggerTurnPopup(youAreWhite, afterCheckingMove: false);
     }
+
+
 }
