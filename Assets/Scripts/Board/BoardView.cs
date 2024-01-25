@@ -76,13 +76,10 @@ public class BoardView : MonoBehaviour
         this.MovePieceSpriteToBoardPosition(move.from, move.to);
         this.UpdatePiecePosition(move.from, move.to);
 
-        if (checkedPlayers.Count > 0)
+        this.ClearChecked();
+        foreach(PlayerColor checkedPlayer in checkedPlayers)
         {
-            //since any move can only check one opponent, just take first one
-            this.SetChecked(checkedPlayers[0]);
-        } else
-        {
-            this.ClearChecked();
+            this.SetChecked(checkedPlayer);
         }
     }
     private void UpdatePiecePosition(BoardPosition startPosition, BoardPosition endPosition)
