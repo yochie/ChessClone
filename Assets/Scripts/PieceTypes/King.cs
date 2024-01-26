@@ -41,7 +41,8 @@ public class King : ScriptableObject, IPieceType
             }
             else
             {
-                possibleMoves.Add(new Move(fromPosition, pos, eats: false));
+                if (!threateningMovesOnly)
+                    possibleMoves.Add(new Move(fromPosition, pos, eats: false));
             }
         }
 
@@ -108,7 +109,7 @@ public class King : ScriptableObject, IPieceType
         }
         
         Move castlingMove = new Move(from: fromKingPosition, to: fromKingPosition.Add(2*dir), eats:false);
-        Debug.Log(castlingMove);
+        
         return castlingMove;
     }
 }

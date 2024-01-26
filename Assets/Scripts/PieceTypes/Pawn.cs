@@ -33,6 +33,9 @@ public class Pawn : ScriptableObject, IPieceType
         }
 
         //Diagonal 1
+        if (!threateningMovesOnly)
+            return possibleMoves;
+
         List<int> xDirections = new() { -1, 1};
         foreach (int xDirection in xDirections)
         {

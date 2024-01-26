@@ -26,7 +26,8 @@ public class Bishop : ScriptableObject, IPieceType
                 }
                 else
                 {
-                    possibleMoves.Add(new Move(fromPosition, pos, eats: false));
+                    if (!threateningMovesOnly)
+                        possibleMoves.Add(new Move(fromPosition, pos, eats: false));
                 }
             }
         }
