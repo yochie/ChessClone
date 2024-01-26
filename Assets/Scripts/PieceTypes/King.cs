@@ -104,7 +104,7 @@ public class King : ScriptableObject, IPieceType
         for (int i = 0; i < 2; i++)
         {
             testingPosition = testingPosition.Add(dir);
-            if (GameState.KingThreatenedAtPosition(Utility.GetOpponentColor(kingPieceID.color), fromKingPosition, testingPosition, gameState))
+            if (gameState.KingThreatenedAtPosition(Utility.GetOpponentColor(kingPieceID.color), fromKingPosition, testingPosition))
                 return null;
         }
 
