@@ -16,4 +16,9 @@ public readonly struct Move
         this.eats = eats;
         this.eatPosition = eatPosition == null ? BoardPosition.None() : eatPosition.GetValueOrDefault();
     }
+
+    public override string ToString()
+    {
+        return string.Format("from : {0}\nto: {1}\neats{2}", this.from, this.to, this.eats);
+    }
 }

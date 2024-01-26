@@ -121,7 +121,7 @@ public class GameController : NetworkBehaviour
         {
             Debug.LogFormat("{0} moved from {1} to {2}", this.serverGameState.GetPieceAtPosition(move.from), move.from, move.to);
             //Update game state
-            this.serverGameState.DoMove(move, this.pieceTypeData);
+            this.serverGameState.DoMove(move);
             this.syncedGameState.UpdateState(this.serverGameState);
             List<PlayerColor> checkMatedPlayers = this.serverGameState.GetCheckMatedPlayers();
             bool gameDrawn = this.serverGameState.GetDraw();

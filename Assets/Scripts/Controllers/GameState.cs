@@ -21,6 +21,8 @@ public class GameState : IGamePieceState
     private Dictionary<PlayerColor, bool> playerCheckMateStates;
     private bool draw;
 
+    private PieceTypeData pieceTypeData;
+
     //Fresh copy constructor, used for initial setup
     public GameState(PlayerColor playerTurn, Dictionary<BoardPosition, GamePieceID> gamePieces, PieceTypeData pieceTypeData)
     {
@@ -41,7 +43,8 @@ public class GameState : IGamePieceState
         this.playerCheckMateStates.Add(PlayerColor.black, false);
         this.draw = false;
         this.possibleMoves = new();
-        this.UpdatePossibleMoves(pieceTypeData);
+        this.pieceTypeData = pieceTypeData;
+        this.UpdatePossibleMoves();
     }
 
     //Fully specified constructor, used for cloning
@@ -51,7 +54,8 @@ public class GameState : IGamePieceState
                      Dictionary<GamePieceID, bool> pawnHasMoved,                                          
                      Dictionary<PlayerColor, bool> playerChecked,
                      Dictionary<PlayerColor, bool> playerCheckMated,
-                     bool draw)
+                     bool draw,
+                     PieceTypeData pieceTypeData)
     {
         this.playerTurn = playerTurn;
         this.gamePieces = gamePieces;
@@ -60,19 +64,20 @@ public class GameState : IGamePieceState
         this.playerCheckStates = playerChecked;
         this.playerCheckMateStates = playerCheckMated;
         this.draw = draw;
+        this.pieceTypeData = pieceTypeData;
     }
 
     #region Clone
 
-    private GameState Clone()
+    public GameState Clone()
     {
         //since these dictionaries only store value types, fine to clone using constructor
         //dont have their own function since they are kept private
-        Dictionary<GamePieceID, bool> pawnHasMovedClone = new(this.pieceHasMoved);
+        Dictionary<GamePieceID, bool> pieceHasMovedClone = new(this.pieceHasMoved);
         Dictionary<PlayerColor, bool> playerCheckedClone = new(this.playerCheckStates);
         Dictionary<PlayerColor, bool> playerCheckMatedClone = new(this.playerCheckMateStates);
 
-        return new GameState(this.playerTurn, this.GetGamePiecesClone(), this.GetPossibleMovesClone(), pawnHasMovedClone, playerCheckedClone, playerCheckMatedClone, this.draw);
+        return new GameState(this.playerTurn, this.GetGamePiecesClone(), this.GetPossibleMovesClone(), pieceHasMovedClone, playerCheckedClone, playerCheckMatedClone, this.draw, this.pieceTypeData);
     }
 
     public Dictionary<BoardPosition, GamePieceID> GetGamePiecesClone() 
@@ -96,20 +101,20 @@ public class GameState : IGamePieceState
 
     #region State modifiers
     [Server]
-    public void DoMove(Move move, PieceTypeData pieceTypeData)
+    public void DoMove(Move move)
     {
         this.ApplyMoveToBoardState(move);
 
-        this.UpdateCheckState(pieceTypeData);
+        this.UpdateCheckState();
 
         this.SwapTurn();
 
-        this.UpdatePossibleMoves(pieceTypeData);
+        this.UpdatePossibleMoves();
 
-        this.UpdateGameEndStates(pieceTypeData);
+        this.UpdateGameEndStates();
     }
 
-    private void UpdateGameEndStates(PieceTypeData pieceTypeData)
+    private void UpdateGameEndStates()
     {
         bool noPossibleMoves = !this.AnyPossibleMove();
         if (noPossibleMoves && this.GetCheckedPlayers().Contains(this.playerTurn))
@@ -170,7 +175,7 @@ public class GameState : IGamePieceState
     }
 
     [Server]
-    private void UpdatePossibleMoves(PieceTypeData pieceTypeData, bool allowSelfChecking = false)
+    private void UpdatePossibleMoves(bool allowSelfChecking = false, bool threateningMovesOnly = false)
     {
         this.possibleMoves.Clear();
         Dictionary<BoardPosition, List<Move>> potentialMoves = new();
@@ -179,7 +184,7 @@ public class GameState : IGamePieceState
             if (gamePieceID.color != this.playerTurn)
                 continue;
             IPieceType pieceType = pieceTypeData.GetPieceTypeByID(gamePieceID.typeID);
-            List<Move> possibleMovesFromPosition = pieceType.GetPossibleMovesFrom(this, position);
+            List<Move> possibleMovesFromPosition = pieceType.GetPossibleMovesFrom(this, position, threateningMovesOnly);
 
             potentialMoves.Add(position, possibleMovesFromPosition);
         }
@@ -195,7 +200,7 @@ public class GameState : IGamePieceState
                 {
                     GameState clonedState = this.Clone();
                     clonedState.ApplyMoveToBoardState(move);
-                    bool selfChecked = GameState.KingThreatenedAtGameState(pieceTypeData, Utility.GetOpponentColor(this.playerTurn), clonedState);
+                    bool selfChecked = GameState.KingThreatenedAtGameState(Utility.GetOpponentColor(this.playerTurn), clonedState);
                     if (selfChecked)
                     {
                         moveList.Remove(move);
@@ -212,13 +217,13 @@ public class GameState : IGamePieceState
     }
 
     [Server]
-    private void UpdateCheckState(PieceTypeData pieceTypeData)
+    private void UpdateCheckState()
     {
-        bool opponentChecked = GameState.KingThreatenedAtGameState(pieceTypeData, this.playerTurn, this);
+        bool opponentChecked = GameState.KingThreatenedAtGameState(this.playerTurn, this);
         this.playerCheckStates[Utility.GetOpponentColor(this.playerTurn)] = opponentChecked;
 
         //this should be false during normal operation since self checking moves are illegal
-        bool selfChecked = GameState.KingThreatenedAtGameState(pieceTypeData, Utility.GetOpponentColor(this.playerTurn), this);
+        bool selfChecked = GameState.KingThreatenedAtGameState(Utility.GetOpponentColor(this.playerTurn), this);
         this.playerCheckStates[this.playerTurn] = selfChecked;
 
     }
@@ -229,13 +234,49 @@ public class GameState : IGamePieceState
     //Makes clone, calculates its possible moves assuming given player is playing
     //return true if any possible move would eat opponents king
     [Server]
-    private static bool KingThreatenedAtGameState(PieceTypeData pieceTypeData, PlayerColor threatPlayer, GameState state)
+    private static bool KingThreatenedAtGameState(PlayerColor threatPlayer, GameState state)
     {
         //Calculate possible moves on clone to avoid updating actual possible moves
         GameState clonedState = state.Clone();
         clonedState.SetPlayerTurn(threatPlayer);
         //since players are still checked event if the threatening move would cause self check, we allow self checking when considering possible moves
-        clonedState.UpdatePossibleMoves(pieceTypeData, allowSelfChecking: true);
+        clonedState.UpdatePossibleMoves(allowSelfChecking: true, threateningMovesOnly: true);
+
+        List<PlayerColor> checkedPlayers = new();
+        foreach (List<Move> moveList in clonedState.possibleMoves.Values.ToList())
+        {
+            foreach (Move move in moveList)
+            {
+                if (!move.eats)
+                    continue;
+
+                if (!clonedState.PositionHoldsAPiece(move.eatPosition))
+                {
+                    Debug.Log("ERROR: Possible move eats peace at position where nothing is stored...");
+                    continue;
+                }
+
+                GamePieceID eatenPiece = clonedState.GetPieceAtPosition(move.eatPosition);
+                if (eatenPiece.typeID == PieceTypeID.king && eatenPiece.color != clonedState.playerTurn)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //Used for testing castling
+    [Server]
+    public static bool KingThreatenedAtPosition(PlayerColor threatPlayer, BoardPosition position, GameState state)
+    {
+        //Calculate possible moves on clone to avoid updating actual possible moves
+        GameState clonedState = state.Clone();
+        //place a copy of the king at that position
+        clonedState.gamePieces[position] = new GamePieceID(Utility.GetOpponentColor(threatPlayer), PieceTypeID.king, -1);
+        clonedState.SetPlayerTurn(threatPlayer);
+        //since players are still checked event if the threatening move would cause self check, we allow self checking when considering possible moves
+        clonedState.UpdatePossibleMoves(allowSelfChecking: true, threateningMovesOnly: true);
 
         List<PlayerColor> checkedPlayers = new();
         foreach (List<Move> moveList in clonedState.possibleMoves.Values.ToList())

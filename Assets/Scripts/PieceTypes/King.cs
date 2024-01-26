@@ -8,9 +8,11 @@ public class King : ScriptableObject, IPieceType
     [field: SerializeField]
     public PieceTypeID ForPieceTypeID { get; set; }
 
-    public List<Move> GetPossibleMovesFrom(GameState gameState, BoardPosition fromPosition)
+    public List<Move> GetPossibleMovesFrom(GameState gameState, BoardPosition fromPosition, bool threateningMovesOnly = false)
     {
-        PlayerColor moverColor = gameState.GetPieceAtPosition(fromPosition).color;
+        GamePieceID kingPieceID = gameState.GetPieceAtPosition(fromPosition);
+        PlayerColor moverColor = kingPieceID.color;
+        
         List<Move> possibleMoves = new();
 
         List<Vector2Int> directions = new()
@@ -43,6 +45,76 @@ public class King : ScriptableObject, IPieceType
             }
         }
 
+        //skip Castling when checking for threatening moves only
+        //this avoids infinite recursion when analyzing moves that would threaten castling positions
+        if (threateningMovesOnly)
+            return possibleMoves;
+
+        //Castling
+        foreach (CastleType castyleType in new List<CastleType> { CastleType.kingside, CastleType.queenside })
+        {
+            Move? castleMove = GetCastleMove(castyleType, kingPieceID, fromPosition, gameState);
+            if (castleMove == null)
+                continue;
+            else
+                possibleMoves.Add(castleMove.GetValueOrDefault());
+        }
+
         return possibleMoves;
     }
+
+    private Move? GetCastleMove(CastleType castleType, GamePieceID kingPieceID, BoardPosition fromKingPosition, GameState gameState)
+    {
+        if (gameState.HasPieceMoved(kingPieceID))
+            return null;
+        if (gameState.GetCheckedPlayers().Contains(kingPieceID.color))
+            return null;
+
+        Vector2Int distanceToRook;
+        Vector2Int dir;
+        if (castleType == CastleType.kingside) {
+            distanceToRook = new Vector2Int(3, 0);
+            dir = new Vector2Int(1, 0);
+        } else
+        {
+            distanceToRook = new Vector2Int(-4, 0);
+            dir = new Vector2Int(-1, 0);
+        }
+
+        //validate rook ID and make sure it hasnt moved
+        BoardPosition rookPosition = fromKingPosition.Add(distanceToRook);
+        if (!gameState.PositionHoldsAPiece(rookPosition))
+            return null;
+        GamePieceID rookPieceID = gameState.GetPieceAtPosition(rookPosition);
+        if (rookPieceID.typeID != PieceTypeID.rook ||
+            rookPieceID.color != kingPieceID.color ||
+            gameState.HasPieceMoved(rookPieceID))
+            return null;
+
+        //All positions king and rook must be empty
+        for (BoardPosition position = fromKingPosition.Add(dir); !position.Equals(rookPosition); position = position.Add(dir))
+        {
+            if (gameState.PositionHoldsAPiece(position))
+                return null;
+        }
+
+        //All positions moved through by king must be unthreatened
+        BoardPosition testingPosition = fromKingPosition;
+        for (int i = 0; i < 2; i++)
+        {
+            testingPosition = testingPosition.Add(dir);
+            if (GameState.KingThreatenedAtPosition(Utility.GetOpponentColor(kingPieceID.color), testingPosition, gameState))
+                return null;
+        }
+        
+        Move castlingMove = new Move(from: fromKingPosition, to: fromKingPosition.Add(2*dir), eats:false);
+        Debug.Log(castlingMove);
+        return castlingMove;
+    }
+}
+
+
+public enum CastleType
+{
+    kingside, queenside
 }
