@@ -28,7 +28,7 @@ public class Knight : ScriptableObject, IPieceType
             if (!pos.IsOnBoard())
                 continue;
 
-            if (gameState.GetGamePiecesClone().ContainsKey(pos))
+            if (gameState.PositionHoldsAPiece(pos))
             {
                 //can eat that piece
                 if (!gameState.IsOwnerOfPieceAtPosition(pos, moverColor))
