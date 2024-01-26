@@ -21,7 +21,7 @@ public class Pawn : ScriptableObject, IPieceType
             possibleMoves.Add(new Move(fromPosition, destinationPosition, eats: false));
 
         //Forward 2
-        if (!gameState.HasPawnMoved(pawnID))
+        if (!gameState.HasPieceMoved(pawnID))
         {
             BoardPosition intermediateTile = new BoardPosition(fromPosition.xPosition, fromPosition.yPosition + yDirection);
             destinationPosition = new BoardPosition(fromPosition.xPosition, fromPosition.yPosition + 2*yDirection);

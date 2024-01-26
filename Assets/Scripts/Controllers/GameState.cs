@@ -14,7 +14,7 @@ public class GameState : IGamePieceState
 
     private Dictionary<BoardPosition, List<Move>> possibleMoves;
 
-    private Dictionary<GamePieceID, bool> pawnHasMoved;
+    private Dictionary<GamePieceID, bool> pieceHasMoved;
 
     private Dictionary<PlayerColor, bool> playerCheckStates;
 
@@ -27,12 +27,11 @@ public class GameState : IGamePieceState
         this.playerTurn = playerTurn;
 
         this.gamePieces = new();
-        this.pawnHasMoved = new();
+        this.pieceHasMoved = new();
         foreach (var (position, gamePieceID) in gamePieces)
         {
             this.gamePieces.Add(position, gamePieceID);
-            if (gamePieceID.typeID == PieceTypeID.pawn)
-                this.pawnHasMoved.Add(gamePieceID, false);
+            this.pieceHasMoved.Add(gamePieceID, false);
         }
         this.playerCheckStates = new();
         this.playerCheckStates.Add(PlayerColor.white, false);
@@ -57,7 +56,7 @@ public class GameState : IGamePieceState
         this.playerTurn = playerTurn;
         this.gamePieces = gamePieces;
         this.possibleMoves = possibleMoves;
-        this.pawnHasMoved = pawnHasMoved;
+        this.pieceHasMoved = pawnHasMoved;
         this.playerCheckStates = playerChecked;
         this.playerCheckMateStates = playerCheckMated;
         this.draw = draw;
@@ -69,7 +68,7 @@ public class GameState : IGamePieceState
     {
         //since these dictionaries only store value types, fine to clone using constructor
         //dont have their own function since they are kept private
-        Dictionary<GamePieceID, bool> pawnHasMovedClone = new(this.pawnHasMoved);
+        Dictionary<GamePieceID, bool> pawnHasMovedClone = new(this.pieceHasMoved);
         Dictionary<PlayerColor, bool> playerCheckedClone = new(this.playerCheckStates);
         Dictionary<PlayerColor, bool> playerCheckMatedClone = new(this.playerCheckMateStates);
 
@@ -140,9 +139,7 @@ public class GameState : IGamePieceState
         GamePieceID toMove = this.gamePieces[move.from];
         this.gamePieces.Remove(move.from);
         this.gamePieces[move.to] = toMove;
-
-        if (toMove.typeID == PieceTypeID.pawn)
-            this.pawnHasMoved[toMove] = true;
+        this.pieceHasMoved[toMove] = true;
     }
 
     [Server]
@@ -302,14 +299,14 @@ public class GameState : IGamePieceState
         return true;
     }
 
-    public bool HasPawnMoved(GamePieceID pawnID)
+    public bool HasPieceMoved(GamePieceID pieceID)
     {
-        if (!this.pawnHasMoved.ContainsKey(pawnID))
+        if (!this.pieceHasMoved.ContainsKey(pieceID))
         {
-            Debug.LogFormat("Couldn't determine if pawn {0} has moved, it wasn't in dictionary", pawnID);
+            Debug.LogFormat("Couldn't determine if piece {0} has moved, it wasn't in dictionary", pieceID);
             return false;
         }
-        return this.pawnHasMoved[pawnID];
+        return this.pieceHasMoved[pieceID];
     }
     #endregion
 
