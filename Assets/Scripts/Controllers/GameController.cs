@@ -26,6 +26,9 @@ public class GameController : NetworkBehaviour
 
     [SerializeField]
     private AudioClip moveSound;
+
+    [SerializeField]
+    private EscapeMenuController escapeMenu;
     #endregion
 
     #region Server only vars
@@ -78,6 +81,7 @@ public class GameController : NetworkBehaviour
             index++;
         }
         this.boardInputHandler.RpcSetInputAllowed();
+        this.RpcEnableConcedeButton();
     }
 
 
@@ -199,6 +203,12 @@ public class GameController : NetworkBehaviour
         {
             this.ui.SetupBoardForPlayer(player);
         }
+    }
+
+    [ClientRpc]
+    private void RpcEnableConcedeButton()
+    {
+        this.escapeMenu.EnableConcedeButton();
     }
     #endregion
 

@@ -43,9 +43,6 @@ public class MenuController : MonoBehaviour
             Destroy(GameController.Singleton.gameObject);
             Debug.Log("Previous GameController destroyed");
         }
-
-
-
     }
 
     public void Start()

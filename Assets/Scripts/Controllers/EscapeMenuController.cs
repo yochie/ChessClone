@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using UnityEngine.UI;
 
 public class EscapeMenuController : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class EscapeMenuController : MonoBehaviour
 
     [SerializeField]
     private OptionsController optionsPanel;
+
+    [SerializeField]
+    private Button concedeButton;
 
     // Start is called before the first frame update
     void Start()
@@ -89,8 +93,14 @@ public class EscapeMenuController : MonoBehaviour
 
     }
 
+    public void EnableConcedeButton()
+    {
+        this.concedeButton.interactable = true;
+    }
+
     public void ConcedeGame()
     {
         GameController.Singleton.CmdConcedeGame(GameController.Singleton.LocalPlayer.PlayerColor);
+        this.SetState(open: false);
     }
 }
