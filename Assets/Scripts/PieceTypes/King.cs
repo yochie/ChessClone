@@ -104,11 +104,18 @@ public class King : ScriptableObject, IPieceType
         for (int i = 0; i < 2; i++)
         {
             testingPosition = testingPosition.Add(dir);
-            if (GameState.KingThreatenedAtPosition(Utility.GetOpponentColor(kingPieceID.color), testingPosition, gameState))
+            if (GameState.KingThreatenedAtPosition(Utility.GetOpponentColor(kingPieceID.color), fromKingPosition, testingPosition, gameState))
                 return null;
         }
-        
-        Move castlingMove = new Move(from: fromKingPosition, to: fromKingPosition.Add(2*dir), eats:false);
+
+        BoardPosition kingDestination = fromKingPosition.Add(2 * dir);
+        BoardPosition rookDestination = kingDestination.Add(-1 * dir);
+        Move castlingMove = new Move(from: fromKingPosition,
+                                     to: kingDestination,
+                                     eats: false,
+                                     includesSecondaryMove: true,
+                                     from2: rookPosition,
+                                     to2: rookDestination);
         
         return castlingMove;
     }

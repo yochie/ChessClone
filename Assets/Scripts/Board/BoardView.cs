@@ -75,6 +75,11 @@ public class BoardView : MonoBehaviour
         }
         this.MovePieceSpriteToBoardPosition(move.from, move.to);
         this.UpdatePiecePosition(move.from, move.to);
+        if (move.includesSecondaryMove)
+        {
+            this.MovePieceSpriteToBoardPosition(move.from2, move.to2);
+            this.UpdatePiecePosition(move.from2, move.to2);
+        }
 
         this.ClearChecked();
         foreach(PlayerColor checkedPlayer in checkedPlayers)

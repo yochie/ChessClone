@@ -145,6 +145,21 @@ public class GameState : IGamePieceState
         this.gamePieces.Remove(move.from);
         this.gamePieces[move.to] = toMove;
         this.pieceHasMoved[toMove] = true;
+
+        //SECONDARY MOVE (castling)
+        if (!move.includesSecondaryMove)
+            return;
+
+        if (!gamePieces.ContainsKey(move.from2))
+        {
+            Debug.Log("Couldn't find piece to do secondary move");
+            return;
+        }
+
+        GamePieceID secondaryToMove = this.gamePieces[move.from2];
+        this.gamePieces.Remove(move.from2);
+        this.gamePieces[move.to2] = secondaryToMove;
+        this.pieceHasMoved[secondaryToMove] = true;
     }
 
     [Server]
@@ -268,38 +283,15 @@ public class GameState : IGamePieceState
 
     //Used for testing castling
     [Server]
-    public static bool KingThreatenedAtPosition(PlayerColor threatPlayer, BoardPosition position, GameState state)
+    public static bool KingThreatenedAtPosition(PlayerColor threatPlayer, BoardPosition originalPosition, BoardPosition newPosition, GameState state)
     {
         //Calculate possible moves on clone to avoid updating actual possible moves
         GameState clonedState = state.Clone();
-        //place a copy of the king at that position
-        clonedState.gamePieces[position] = new GamePieceID(Utility.GetOpponentColor(threatPlayer), PieceTypeID.king, -1);
-        clonedState.SetPlayerTurn(threatPlayer);
-        //since players are still checked event if the threatening move would cause self check, we allow self checking when considering possible moves
-        clonedState.UpdatePossibleMoves(allowSelfChecking: true, threateningMovesOnly: true);
 
-        List<PlayerColor> checkedPlayers = new();
-        foreach (List<Move> moveList in clonedState.possibleMoves.Values.ToList())
-        {
-            foreach (Move move in moveList)
-            {
-                if (!move.eats)
-                    continue;
+        //move king to new position
+        clonedState.ApplyMoveToBoardState(new Move(from: originalPosition, to: newPosition, eats: false));
 
-                if (!clonedState.PositionHoldsAPiece(move.eatPosition))
-                {
-                    Debug.Log("ERROR: Possible move eats peace at position where nothing is stored...");
-                    continue;
-                }
-
-                GamePieceID eatenPiece = clonedState.GetPieceAtPosition(move.eatPosition);
-                if (eatenPiece.typeID == PieceTypeID.king && eatenPiece.color != clonedState.playerTurn)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return GameState.KingThreatenedAtGameState(threatPlayer, clonedState);
     }
 
     internal List<PlayerColor> GetCheckedPlayers()
