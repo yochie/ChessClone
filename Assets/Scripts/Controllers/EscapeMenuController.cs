@@ -88,4 +88,9 @@ public class EscapeMenuController : MonoBehaviour
         this.optionsPanel.gameObject.SetActive(false);
 
     }
+
+    public void ConcedeGame()
+    {
+        GameController.Singleton.CmdConcedeGame(GameController.Singleton.LocalPlayer.PlayerColor);
+    }
 }

@@ -80,6 +80,7 @@ public class GameController : NetworkBehaviour
         this.boardInputHandler.RpcSetInputAllowed();
     }
 
+
     [Server]
     private void InitializeGameStateFromBoardView()
     {
@@ -142,6 +143,19 @@ public class GameController : NetworkBehaviour
             Debug.LogFormat("Failed to move {0} from {1} to {2}", this.serverGameState.GetPieceAtPosition(move.from), move.from, move.to);
         }
     }
+
+    [Command(requiresAuthority = false)]
+    internal void CmdConcedeGame(PlayerColor concederColor)
+    {
+        Debug.Log("game conceded");
+        //Perform clientside ui updates
+        foreach (PlayerController player in this.players)
+        {
+
+            this.RpcConcessionClientUpdate(concederColor);
+        }
+    }
+
     #endregion
 
     #region Rpcs
@@ -153,7 +167,28 @@ public class GameController : NetworkBehaviour
         if (!gameEnded)
             this.ui.TriggerTurnPopup(yourTurn, checkedPlayers.Count > 0);
         else
-            this.ui.TriggerEndGamePopup(checkMatedPlayers);
+        {
+            bool isDraw;
+            PlayerColor? winner;
+            if (checkMatedPlayers.Count != 1) {
+                isDraw = true;
+                winner = null;
+            }
+            else
+            {
+                isDraw = false;
+                winner = Utility.GetOpponentColor(checkMatedPlayers[0]);
+            }                
+
+            this.ui.TriggerEndGamePopup(isDraw, isConcession : false, winner);
+        }
+    }
+
+    [ClientRpc]
+
+    private void RpcConcessionClientUpdate(PlayerColor concederColor)
+    {
+        this.ui.TriggerEndGamePopup(isDraw: false, isConcession: true, winner: Utility.GetOpponentColor(concederColor));
     }
 
     [ClientRpc]

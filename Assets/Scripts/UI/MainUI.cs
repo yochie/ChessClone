@@ -29,14 +29,12 @@ public class MainUI : MonoBehaviour
     {
         this.turnPopup.TriggerPopup(yourTurn, afterCheckingMove);
     }
-    internal void TriggerEndGamePopup(List<PlayerColor> checkMatedPlayers)
+
+    internal void TriggerEndGamePopup(bool isDraw, bool isConcession, PlayerColor? winner)
     {
         this.endGamePopup.gameObject.SetActive(true);
-        if(checkMatedPlayers.Count != 1)
-            this.endGamePopup.TriggerPopup(draw: true);
-        else
-            this.endGamePopup.TriggerPopup(draw: false, winner: Utility.GetOpponentColor(checkMatedPlayers[0]));
 
+        this.endGamePopup.TriggerPopup(isDraw, isConcession, winner);
     }
 
     internal void SetupBoardForPlayer(PlayerController player)

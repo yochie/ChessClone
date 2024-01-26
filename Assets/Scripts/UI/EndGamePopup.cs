@@ -15,13 +15,13 @@ internal class EndGamePopup : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI winnerLabel;
 
-    internal void TriggerPopup(bool draw, PlayerColor? winner = null)
+    internal void TriggerPopup(bool draw, bool isConcession, PlayerColor? winner)
     {
         if (draw) {
             this.winnerLabel.text = "Game over\nDraw!";
         } else
         {
-            this.winnerLabel.text = string.Format("Game over\nWinner : {0}", winner.GetValueOrDefault());
+            this.winnerLabel.text = string.Format("{0}\nWinner : {1}", isConcession ? "Game conceded" : "Checkmate", winner.GetValueOrDefault());
         }
         this.popup.SetActive(true);
     }
