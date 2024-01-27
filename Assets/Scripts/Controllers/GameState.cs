@@ -16,6 +16,9 @@ public class GameState : IGamePieceState
 
     private Dictionary<GamePieceID, bool> pieceHasMoved;
 
+    //stores whether each pawn has just moved up 2 spaces for sake of "En Passant" moves 
+    private Dictionary<GamePieceID, bool> pawnAdvancedBy2LastTurn;
+
     private Dictionary<PlayerColor, bool> playerCheckStates;
 
     private Dictionary<PlayerColor, bool> playerCheckMateStates;
@@ -30,10 +33,13 @@ public class GameState : IGamePieceState
 
         this.gamePieces = new();
         this.pieceHasMoved = new();
+        this.pawnAdvancedBy2LastTurn = new();
         foreach (var (position, gamePieceID) in gamePieces)
         {
             this.gamePieces.Add(position, gamePieceID);
             this.pieceHasMoved.Add(gamePieceID, false);
+            if (gamePieceID.typeID == PieceTypeID.pawn)
+                this.pawnAdvancedBy2LastTurn[gamePieceID] = false;
         }
         this.playerCheckStates = new();
         this.playerCheckStates.Add(PlayerColor.white, false);
@@ -51,7 +57,8 @@ public class GameState : IGamePieceState
     public GameState(PlayerColor playerTurn,
                      Dictionary<BoardPosition, GamePieceID> gamePieces,
                      Dictionary<BoardPosition, List<Move>> possibleMoves,
-                     Dictionary<GamePieceID, bool> pawnHasMoved,                                          
+                     Dictionary<GamePieceID, bool> pieceHasMoved,
+                     Dictionary<GamePieceID, bool> pawnAdvancedBy2LastTurn,
                      Dictionary<PlayerColor, bool> playerChecked,
                      Dictionary<PlayerColor, bool> playerCheckMated,
                      bool draw,
@@ -60,7 +67,8 @@ public class GameState : IGamePieceState
         this.playerTurn = playerTurn;
         this.gamePieces = gamePieces;
         this.possibleMoves = possibleMoves;
-        this.pieceHasMoved = pawnHasMoved;
+        this.pieceHasMoved = pieceHasMoved;
+        this.pawnAdvancedBy2LastTurn = pawnAdvancedBy2LastTurn;
         this.playerCheckStates = playerChecked;
         this.playerCheckMateStates = playerCheckMated;
         this.draw = draw;
@@ -74,10 +82,19 @@ public class GameState : IGamePieceState
         //since these dictionaries only store value types, fine to clone using constructor
         //dont have their own function since they are kept private
         Dictionary<GamePieceID, bool> pieceHasMovedClone = new(this.pieceHasMoved);
+        Dictionary<GamePieceID, bool> pawnAdvancedLastTurnClone = new(this.pawnAdvancedBy2LastTurn);
         Dictionary<PlayerColor, bool> playerCheckedClone = new(this.playerCheckStates);
-        Dictionary<PlayerColor, bool> playerCheckMatedClone = new(this.playerCheckMateStates);
+        Dictionary<PlayerColor, bool> playerCheckMatedClone = new(this.playerCheckMateStates);        
 
-        return new GameState(this.playerTurn, this.GetGamePiecesClone(), this.GetPossibleMovesClone(), pieceHasMovedClone, playerCheckedClone, playerCheckMatedClone, this.draw, this.pieceTypeData);
+        return new GameState(this.playerTurn,
+                             this.GetGamePiecesClone(),
+                             this.GetPossibleMovesClone(),
+                             pieceHasMovedClone,
+                             pawnAdvancedLastTurnClone,
+                             playerCheckedClone,
+                             playerCheckMatedClone,
+                             this.draw,
+                             this.pieceTypeData);
     }
 
     public Dictionary<BoardPosition, GamePieceID> GetGamePiecesClone() 
@@ -104,6 +121,8 @@ public class GameState : IGamePieceState
     public void DoMove(Move move)
     {
         this.ApplyMoveToBoardState(move);
+
+        this.UpdatePawnAdvanceState(move);
 
         this.UpdateCheckState();
 
@@ -161,6 +180,23 @@ public class GameState : IGamePieceState
         this.gamePieces[move.to2] = secondaryToMove;
         this.pieceHasMoved[secondaryToMove] = true;
     }
+
+    //clears any previous state and sets advance state for any pawn that moved 2 tile vertically
+    private void UpdatePawnAdvanceState(Move move)
+    {
+        GamePieceID moverID = this.gamePieces[move.to];
+        bool isTwoStepAdvance = Mathf.Abs(move.to.yPosition - move.from.yPosition) == 2;
+        foreach (GamePieceID piece in this.pawnAdvancedBy2LastTurn.Keys.ToList())
+        {
+            if (piece.Equals(moverID) && isTwoStepAdvance)
+            {
+                this.pawnAdvancedBy2LastTurn[piece] = true;
+            }
+            else
+                this.pawnAdvancedBy2LastTurn[piece] = false;
+        }
+    }
+
 
     [Server]
     private void DeletePieceAt(BoardPosition position)
@@ -238,8 +274,8 @@ public class GameState : IGamePieceState
         this.playerCheckStates[Utility.GetOpponentColor(this.playerTurn)] = opponentChecked;
 
         //this should be false during normal operation since self checking moves are illegal
-        bool selfChecked = this.KingThreatenedAtGameState(Utility.GetOpponentColor(this.playerTurn));
-        this.playerCheckStates[this.playerTurn] = selfChecked;
+        //bool selfChecked = this.KingThreatenedAtGameState(Utility.GetOpponentColor(this.playerTurn));
+        //this.playerCheckStates[this.playerTurn] = selfChecked;
 
     }
 
@@ -340,6 +376,16 @@ public class GameState : IGamePieceState
             return false;
         }
         return this.pieceHasMoved[pieceID];
+    }
+
+    public bool DidPawnJustAdvanceBy2(GamePieceID pawnID)
+    {
+        if (!this.pawnAdvancedBy2LastTurn.ContainsKey(pawnID))
+        {
+            Debug.Log("Couldn't validate if pawn advanced by 2 last turn, not found in dictionary.");
+            return false;
+        }
+        return this.pawnAdvancedBy2LastTurn[pawnID];
     }
     #endregion
 
