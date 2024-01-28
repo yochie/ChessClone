@@ -1413,7 +1413,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1273250902}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
   m_Name: 
@@ -1443,8 +1443,8 @@ MonoBehaviour:
   onlineScene: Assets/Scenes/Game.unity
   transport: {fileID: 1273250910}
   networkAddress: localhost
-  maxConnections: 100
-  disconnectInactiveConnections: 0
+  maxConnections: 2
+  disconnectInactiveConnections: 1
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 1776327860838115388, guid: a97308a9bab61a84f9ba62a0ee08dd8c, type: 3}
