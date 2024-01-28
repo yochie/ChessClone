@@ -41,4 +41,9 @@ public class BoardPiece : MonoBehaviour
     {
         this.sprite.color = isChecked ? this.checkedColor : Color.white;
     }
+
+    internal void SetIndex(int index)
+    {
+        this.pieceIndex = index;
+    }
 }

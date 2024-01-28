@@ -14,7 +14,17 @@ public readonly struct Move
     public readonly BoardPosition from2;
     public readonly BoardPosition to2;
 
-    public Move(BoardPosition from, BoardPosition to, bool eats, BoardPosition? eatPosition = null, bool includesSecondaryMove = false, BoardPosition? from2 = null, BoardPosition? to2 = null)
+    //used for pawn promotion
+    public readonly bool requiresPromotion;
+
+    public Move(BoardPosition from,
+                BoardPosition to,
+                bool eats,
+                BoardPosition? eatPosition = null,
+                bool includesSecondaryMove = false,
+                BoardPosition? from2 = null,
+                BoardPosition? to2 = null,
+                bool requiresPawnPromotion = false)
     {
         this.from = from;
         this.to = to;
@@ -23,6 +33,7 @@ public readonly struct Move
         this.includesSecondaryMove = includesSecondaryMove;
         this.from2 = from2 == null ? BoardPosition.None() : from2.GetValueOrDefault();
         this.to2 = to2 == null ? BoardPosition.None() : to2.GetValueOrDefault();
+        this.requiresPromotion = requiresPawnPromotion;
     }
 
     public override string ToString()

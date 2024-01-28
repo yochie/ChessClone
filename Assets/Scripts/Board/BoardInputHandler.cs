@@ -13,6 +13,9 @@ public class BoardInputHandler : NetworkBehaviour
     [SerializeField]
     private SyncedGameState syncedGameState;
 
+    [SerializeField]
+    private MainUI ui;
+
     public bool InputAllowed { get; set; }
 
     public BoardTile HoveredTile { get; set; }
@@ -76,7 +79,13 @@ public class BoardInputHandler : NetworkBehaviour
             Debug.Log("More than one move leads to dest, defaulting to first");
         }
         Move move = movesToDestination[0];
-        GameController.Singleton.CmdTryMove(move);
+        if (!move.requiresPromotion)
+            GameController.Singleton.CmdTryMove(move, promoteMoverTo: PieceTypeID.none);
+        else
+        {
+            this.boardView.MovePieceSpriteToBoardPosition(startPosition, endPosition);
+            this.ui.DisplayPromotionOptions(move);
+        }
         this.draggingBoardPiece = false;
         return;        
     }

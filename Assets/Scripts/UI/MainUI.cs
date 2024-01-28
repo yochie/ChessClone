@@ -20,9 +20,17 @@ public class MainUI : MonoBehaviour
     [SerializeField]
     private Camera mainCamera;
 
+    [SerializeField]
+    private PromotionSelector promotionSelector;
+
     public void DisplayWaitingMessage()
     {
         this.waitingPopup.Display();
+    }
+
+    internal void DisplayPromotionOptions(Move move)
+    {
+        this.promotionSelector.DisplayFor(move);
     }
 
     public void TriggerTurnPopup(bool yourTurn, bool afterCheckingMove)
@@ -46,7 +54,6 @@ public class MainUI : MonoBehaviour
             this.boardView.Rotate();         
         }
         StartCoroutine(this.GameStartAnimationsCoroutine(youAreWhite));
-
     }
 
     private IEnumerator GameStartAnimationsCoroutine(bool youAreWhite)
@@ -57,6 +64,5 @@ public class MainUI : MonoBehaviour
         yield return new WaitForSeconds(this.waitingPopup.GetFadeOutDuration());
         this.TriggerTurnPopup(youAreWhite, afterCheckingMove: false);
     }
-
 
 }

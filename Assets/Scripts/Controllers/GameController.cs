@@ -114,14 +114,22 @@ public class GameController : NetworkBehaviour
 
 
     [Command(requiresAuthority = false)]
-    public void CmdTryMove(Move move)
+    public void CmdTryMove(Move move, PieceTypeID promoteMoverTo)
     {
+        if(move.requiresPromotion && promoteMoverTo == PieceTypeID.none)
+        {
+            Debug.Log("Move requires promotion but no selected option was provided");
+            return;
+        } else if (!move.requiresPromotion && promoteMoverTo != PieceTypeID.none)
+        {
+            Debug.Log("Move doesn't require promotion but a selection was provided. Will continue ignoring promotion.");
+        }
         //validate on server, even though it will have been done clientsice, just to be sure
         if (this.serverGameState.IsPossibleMove(move))
         {
             Debug.LogFormat("{0} moved from {1} to {2}", this.serverGameState.GetPieceAtPosition(move.from), move.from, move.to);
             //Update game state
-            this.serverGameState.DoMove(move);
+            this.serverGameState.DoMove(move, promoteMoverTo);
             this.syncedGameState.UpdateState(this.serverGameState);
             List<PlayerColor> checkMatedPlayers = this.serverGameState.GetCheckMatedPlayers();
             bool gameDrawn = this.serverGameState.GetDraw();
@@ -130,12 +138,18 @@ public class GameController : NetworkBehaviour
             {
                 Debug.Log("game ended");
             }
+            GamePieceID promotedPieceID = new GamePieceID(PlayerColor.white, PieceTypeID.none, -1);
+            if (move.requiresPromotion && promoteMoverTo != PieceTypeID.none)
+            {
+                promotedPieceID = this.serverGameState.GetPieceAtPosition(move.to);
+            }
             //Perform clientside ui updates
             foreach(PlayerController player in this.players)
             {
 
                 this.TargetRpcPostMoveClientUpdates(player.connectionToClient,
                                                     move,
+                                                    promotedPieceID,
                                                     this.serverGameState.PlayerTurn == player.PlayerColor,
                                                     this.serverGameState.GetCheckedPlayers(),
                                                     gameEnded,
@@ -155,7 +169,6 @@ public class GameController : NetworkBehaviour
         //Perform clientside ui updates
         foreach (PlayerController player in this.players)
         {
-
             this.RpcConcessionClientUpdate(concederColor);
         }
     }
@@ -164,9 +177,15 @@ public class GameController : NetworkBehaviour
 
     #region Rpcs
     [TargetRpc]
-    private void TargetRpcPostMoveClientUpdates(NetworkConnectionToClient target, Move move, bool yourTurn, List<PlayerColor> checkedPlayers, bool gameEnded, List<PlayerColor> checkMatedPlayers)
+    private void TargetRpcPostMoveClientUpdates(NetworkConnectionToClient target,
+                                                Move move,
+                                                GamePieceID promotedPieceID,
+                                                bool yourTurn,
+                                                List<PlayerColor> checkedPlayers,
+                                                bool gameEnded,
+                                                List<PlayerColor> checkMatedPlayers)
     {
-        this.boardView.PostMoveUpdates(move, checkedPlayers);
+        this.boardView.PostMoveUpdates(move, checkedPlayers, promotedPieceID);
         AudioManager.Singleton.PlaySoundEffect(this.moveSound);
         if (!gameEnded)
             this.ui.TriggerTurnPopup(yourTurn, checkedPlayers.Count > 0);

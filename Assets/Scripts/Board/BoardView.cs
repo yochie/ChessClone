@@ -6,13 +6,16 @@ using UnityEngine;
 //Manages board tile and piece sprites (positions, colors, etc)
 public class BoardView : MonoBehaviour
 {
+    [SerializeField]
+    private PieceTypeData pieceTypeData;
+
     //Stores some state to allow client side visual/ui changes without having to go through server for all operations
     //Server should still validate any operation on the logical game state before it goes through
     private Dictionary<BoardPosition, BoardPiece> pieces;
 
     private Dictionary<BoardPosition, BoardTile> tiles;
 
-    //Init client side date
+    //Init client side state from scene setup
     private void Awake()
     {
         
@@ -29,17 +32,9 @@ public class BoardView : MonoBehaviour
         }
     }
 
-    internal void Rotate()
-    {
-        foreach(BoardTile tile in this.tiles.Values)
-        {
-            tile.transform.Rotate(new Vector3(0, 0, 180));
-        }
-    }
-
     #region Client-side state getters
 
-    //used to setup initial game state from scene setup on host
+    //used to setup initial server game state from scene setup on host
     public Dictionary<BoardPosition, GamePieceID> GetBoardViewState()
     {
         Dictionary<BoardPosition, GamePieceID> gamePieces = new();
@@ -66,13 +61,19 @@ public class BoardView : MonoBehaviour
     #endregion
 
     #region Client-side state setters
-    public void PostMoveUpdates(Move move, List<PlayerColor> checkedPlayers)
+    public void PostMoveUpdates(Move move, List<PlayerColor> checkedPlayers, GamePieceID promotedPieceID)
     {
+        Debug.LogFormat("Updating for move {0} with {1} checked players", move, checkedPlayers.Count);
         if (move.eats)
         {
             this.DestroyPieceSprite(move.eatPosition);
             this.RemovePieceAtPosition(move.eatPosition);
         }
+        if (move.requiresPromotion && promotedPieceID.typeID != PieceTypeID.none)
+        {
+            this.ReplacePiece(move.from, this.pieces[move.from], promotedPieceID);
+        }
+
         this.MovePieceSpriteToBoardPosition(move.from, move.to);
         this.UpdatePiecePosition(move.from, move.to);
         if (move.includesSecondaryMove)
@@ -87,6 +88,16 @@ public class BoardView : MonoBehaviour
             this.SetChecked(checkedPlayer);
         }
     }
+
+    private void ReplacePiece(BoardPosition replaceAtPosition, BoardPiece previousBoardPiece, GamePieceID newPieceID)
+    {
+        this.pieces.Remove(replaceAtPosition);
+        Destroy(previousBoardPiece.gameObject);
+        BoardPiece boardPiece = Instantiate(this.pieceTypeData.GetBoardPiecePrefab(newPieceID.typeID, newPieceID.color), this.tiles[replaceAtPosition].transform);
+        boardPiece.SetIndex(newPieceID.index);
+        this.pieces.Add(replaceAtPosition, boardPiece);
+    }
+
     private void UpdatePiecePosition(BoardPosition startPosition, BoardPosition endPosition)
     {
         BoardPiece toMove = this.pieces[startPosition];
@@ -101,7 +112,7 @@ public class BoardView : MonoBehaviour
     }
     #endregion
 
-    #region Visual modifications
+    #region Visual updates
 
     public void HighligthTiles(List<BoardPosition> positions, Color color){
         foreach(BoardPosition position in positions)
@@ -109,6 +120,7 @@ public class BoardView : MonoBehaviour
             this.tiles[position].Highlight(color);
         }
     }
+
     public void ClearHighligths()
     {
         foreach (BoardTile tile in tiles.Values)
@@ -117,6 +129,7 @@ public class BoardView : MonoBehaviour
         }
     }
 
+    //for following mouse while dragging
     internal void MovePieceSpriteToWorldPosition(BoardPosition spriteStoredAtPosition, Vector3 destinationWorldPosition)
     {
         if (!this.pieces.ContainsKey(spriteStoredAtPosition))
@@ -125,6 +138,7 @@ public class BoardView : MonoBehaviour
         this.pieces[spriteStoredAtPosition].transform.position = destinationWorldPosition;
     }
 
+    //for snapping to positions on board
     internal void MovePieceSpriteToBoardPosition(BoardPosition spriteStoredAtPosition, BoardPosition destinationBoardPosition)
     {
         if (!this.pieces.ContainsKey(spriteStoredAtPosition))
@@ -154,6 +168,7 @@ public class BoardView : MonoBehaviour
         kingPiece.SetChecked(isChecked: true);
     }
 
+    //removes all checked indicators from board state
     private void ClearChecked()
     {
         List<PlayerColor> colors = new() { PlayerColor.white, PlayerColor.black };
@@ -161,6 +176,16 @@ public class BoardView : MonoBehaviour
         {
             BoardPiece kingPiece = this.GetKing(color);
             kingPiece.SetChecked(isChecked: false);
+        }
+    }
+
+    //rotates each tile on board (camera is rotated seperately) 
+    //for displaying player's pieces at bottom of screen
+    internal void Rotate()
+    {
+        foreach (BoardTile tile in this.tiles.Values)
+        {
+            tile.transform.Rotate(new Vector3(0, 0, 180));
         }
     }
     #endregion

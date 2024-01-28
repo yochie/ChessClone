@@ -21,7 +21,10 @@ public class Pawn : ScriptableObject, IPieceType
             //Forward 1
             BoardPosition destinationPosition = new BoardPosition(fromPosition.xPosition, fromPosition.yPosition + yDirection);
             if (destinationPosition.IsOnBoard() && !gameState.PositionHoldsAPiece(destinationPosition))
-                possibleMoves.Add(new Move(fromPosition, destinationPosition, eats: false));
+            {
+                bool requiresPromotion = this.IsPromotionPosition(destinationPosition, moverColor);
+                possibleMoves.Add(new Move(fromPosition, destinationPosition, eats: false, requiresPawnPromotion: requiresPromotion));
+            }
 
             //Forward 2
             if (!gameState.HasPieceMoved(pawnID))
@@ -32,7 +35,11 @@ public class Pawn : ScriptableObject, IPieceType
                     !gameState.PositionHoldsAPiece(intermediateTile) &&
                     destinationPosition.IsOnBoard() &&
                     !gameState.PositionHoldsAPiece(destinationPosition))
-                    possibleMoves.Add(new Move(fromPosition, destinationPosition, eats: false));
+                {
+                    bool requiresPromotion = this.IsPromotionPosition(destinationPosition, moverColor);
+                    possibleMoves.Add(new Move(fromPosition, destinationPosition, eats: false, requiresPawnPromotion: requiresPromotion));
+                }
+                    
             }
         }
 
@@ -46,7 +53,8 @@ public class Pawn : ScriptableObject, IPieceType
                 gameState.PositionHoldsAPiece(destinationPosition) &&
                 !gameState.IsOwnerOfPieceAtPosition(destinationPosition, moverColor))
             {
-                possibleMoves.Add(new Move(fromPosition, destinationPosition, eats: true, eatPosition: destinationPosition));
+                bool requiresPromotion = this.IsPromotionPosition(destinationPosition, moverColor);
+                possibleMoves.Add(new Move(fromPosition, destinationPosition, eats: true, eatPosition: destinationPosition, requiresPawnPromotion: requiresPromotion));
                 continue;
             }
 
@@ -73,11 +81,18 @@ public class Pawn : ScriptableObject, IPieceType
                 {
                     continue;
                 }
-                possibleMoves.Add(new Move(fromPosition, destinationPosition, eats: true, eatPosition: enPassantEatsPosition));
+                bool requiresPromotion = this.IsPromotionPosition(destinationPosition, moverColor);
+                possibleMoves.Add(new Move(fromPosition, destinationPosition, eats: true, eatPosition: enPassantEatsPosition, requiresPawnPromotion: requiresPromotion));
             }
 
         }
 
         return possibleMoves;
+    }
+
+    private bool IsPromotionPosition(BoardPosition position, PlayerColor color)
+    {
+        return (color == PlayerColor.white && position.yPosition == BoardPosition.maxY) ||
+               (color == PlayerColor.black && position.yPosition == 0);       
     }
 }

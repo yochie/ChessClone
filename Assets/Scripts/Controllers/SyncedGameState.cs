@@ -41,7 +41,6 @@ public class SyncedGameState : NetworkBehaviour, IGamePieceState
     }
 
     [Server]
-
     public void UpdateState(GameState serverGameState)
     {
         this.playerTurn = serverGameState.PlayerTurn;
@@ -82,6 +81,7 @@ public class SyncedGameState : NetworkBehaviour, IGamePieceState
     }
     #endregion
 
+    //For getters that are the same for Gamestate and synced state, stick to an interface
     #region IGamePieceState
 
     public bool PositionHoldsAPiece(BoardPosition position)
