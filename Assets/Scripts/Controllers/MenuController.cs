@@ -30,7 +30,6 @@ public class MenuController : MonoBehaviour
     [SerializeField]
     private Button connectionButton;
 
-
     public void Awake()
     {
         if (MenuController.Singleton != null)

@@ -1897,6 +1897,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4006878127500460216, guid: 842f32e853944d94697c083b9ad041ee, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 27760328}
+    - target: {fileID: 4006878127500460216, guid: 842f32e853944d94697c083b9ad041ee, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetConnectionTarget
+      objectReference: {fileID: 0}
     - target: {fileID: 5508411339886605824, guid: 842f32e853944d94697c083b9ad041ee, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
